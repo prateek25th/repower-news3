@@ -10,11 +10,16 @@
 <title>REPower News</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--g900:#1B5E20;--g800:#2E7D32;--g600:#388E3C;--g100:#C8E6C9;--g50:#E8F5E9;--t1:#1a1a1a;--t2:#333;--t3:#777;--bdr:#e0e0e0;--card:#fff}
+:root{
+  --g900:#1B5E20;--g800:#2E7D32;--g600:#388E3C;
+  --g100:#C8E6C9;--g50:#E8F5E9;
+  --t1:#1a1a1a;--t2:#333;--t3:#777;
+  --bdr:#e0e0e0;--card:#fff;
+}
 html,body{height:100%;width:100%;overflow:hidden;background:#111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-.app{display:flex;flex-direction:column;height:100vh;width:100%;max-width:640px;margin:0 auto;background:#f4f6f4;position:relative}
+.app{display:flex;flex-direction:column;height:100vh;width:100%;max-width:640px;margin:0 auto;background:#f4f6f4}
 
-/* Header */
+/* ── Header ── */
 .hdr{flex-shrink:0;background:var(--g900);box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:100}
 .hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 7px}
 .logo{display:flex;align-items:center;gap:7px;color:#fff;font-size:16px}
@@ -27,114 +32,189 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;font-family:-ap
 .spin svg{animation:rot .6s linear}
 @keyframes rot{to{transform:rotate(360deg)}}
 
-/* Tabs */
-.tabs{display:flex;border-top:1px solid rgba(255,255,255,.1);overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:1;min-width:95px;display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 6px;background:none;border:none;border-bottom:2.5px solid transparent;color:rgba(255,255,255,.5);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap}
+/* ── Tabs ── */
+.tabs{display:flex;border-top:1px solid rgba(255,255,255,.1)}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 4px;background:none;border:none;border-bottom:2.5px solid transparent;color:rgba(255,255,255,.5);font-size:10.5px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tab.on{color:#fff;border-bottom-color:var(--g100)}
 
-/* Counter */
+/* ── Counter ── */
 .counter{flex-shrink:0;background:#fff;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:5px 14px;font-size:11px;color:var(--t3)}
 .cdots{display:flex;gap:4px;align-items:center}
 .cdot{width:5px;height:5px;border-radius:50%;background:var(--bdr);transition:all .2s}
 .cdot.on{background:var(--g800);width:14px;border-radius:3px}
 
-/* Card area */
+/* ── Card area ── */
 .card-wrap{flex:1;overflow:hidden;position:relative}
 
-/* Card */
-.card{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--card);transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .38s}
-.card.hd{transform:translateY(-100%);opacity:0;pointer-events:none}
-.card.hu{transform:translateY(100%);opacity:0;pointer-events:none}
-.card.on{transform:translateY(0);opacity:1}
+/* ── Card animation ── */
+.card{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  background:var(--card);
+  transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .35s;
+}
+.card.exit-up   {transform:translateY(-100%);opacity:0;pointer-events:none}
+.card.enter-down{transform:translateY(100%); opacity:0;pointer-events:none}
+.card.active    {transform:translateY(0);    opacity:1}
 
-/* Image — same style for ALL 3 tabs */
-.card-img{width:100%;height:44%;flex-shrink:0;position:relative;overflow:hidden;background:#1a2a1a}
-.card-img img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s;display:block}
-.card-img img.loaded{opacity:1}
-.ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.7) 100%)}
-.cat-b{position:absolute;top:10px;left:10px;background:var(--g900);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;z-index:2}
-.src-b{position:absolute;bottom:9px;left:10px;font-size:9px;font-weight:700;color:#fff;background:rgba(27,94,32,.88);padding:3px 8px;border-radius:20px;z-index:2;text-transform:uppercase;letter-spacing:.3px}
-.img-m{position:absolute;bottom:9px;right:10px;display:flex;gap:4px;z-index:2}
-.img-m span{font-size:9px;color:rgba(255,255,255,.92);background:rgba(0,0,0,.42);padding:2px 7px;border-radius:20px}
-/* Difficulty badge for learning */
-.diff-b{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;z-index:2}
-.beg{background:#1565C0;color:#fff}
-.int{background:#E65100;color:#fff}
-.adv{background:#B71C1C;color:#fff}
+/* ── Image (same for all 3 tabs) ── */
+.card-img{
+  width:100%;height:44%;
+  flex-shrink:0;position:relative;
+  overflow:hidden;background:#1a2a1a;
+}
+.card-img img{
+  width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .6s;display:block;
+}
+.card-img img.vis{opacity:1}
+.img-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05),rgba(0,0,0,.68))}
+.badge-cat{
+  position:absolute;top:10px;left:10px;
+  background:var(--g900);color:#fff;
+  font-size:9px;font-weight:700;
+  padding:3px 9px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.5px;z-index:2;
+}
+.badge-src{
+  position:absolute;bottom:9px;left:10px;
+  font-size:9px;font-weight:700;color:#fff;
+  background:rgba(27,94,32,.9);
+  padding:3px 8px;border-radius:20px;z-index:2;
+}
+.badge-meta{
+  position:absolute;bottom:9px;right:10px;
+  display:flex;gap:4px;z-index:2;
+}
+.badge-meta span{
+  font-size:9px;color:rgba(255,255,255,.92);
+  background:rgba(0,0,0,.42);padding:2px 7px;border-radius:20px;
+}
+.badge-diff{
+  position:absolute;top:10px;right:10px;
+  font-size:9px;font-weight:700;
+  padding:3px 9px;border-radius:20px;z-index:2;
+}
+.diff-beg{background:#1565C0;color:#fff}
+.diff-int{background:#E65100;color:#fff}
+.diff-adv{background:#B71C1C;color:#fff}
 
-/* Card body */
-.card-body{flex:1;overflow-y:auto;padding:14px 15px 10px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent}
+/* ── Card body ── */
+.card-body{
+  flex:1;overflow-y:auto;
+  padding:14px 15px 10px;
+  display:flex;flex-direction:column;gap:10px;
+  scrollbar-width:thin;scrollbar-color:var(--bdr) transparent;
+}
 .card-body::-webkit-scrollbar{width:3px}
 .card-body::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
 
-.headline{font-size:15px;font-weight:800;color:var(--t1);line-height:1.4}
-.summary{font-size:13.5px;color:var(--t2);line-height:1.78}
+.c-headline{font-size:15px;font-weight:800;color:var(--t1);line-height:1.4}
+.c-summary{font-size:13.5px;color:var(--t2);line-height:1.78}
 
-/* Concept blocks for learning */
-.concept-block{background:#f8faf8;border-radius:10px;padding:11px 12px;border:0.5px solid var(--bdr)}
-.concept-title{font-size:12px;font-weight:700;color:var(--g800);margin-bottom:5px}
-.concept-text{font-size:13px;color:var(--t2);line-height:1.7}
+/* ── Learning concept blocks ── */
+.cblock{background:#f7faf7;border-radius:10px;padding:11px 13px;border:0.5px solid var(--bdr)}
+.cblock-title{font-size:12px;font-weight:700;color:var(--g800);margin-bottom:4px}
+.cblock-text{font-size:13px;color:var(--t2);line-height:1.7}
 
-/* Key stats chips */
+/* ── Stats chips ── */
 .stats-row{display:flex;flex-wrap:wrap;gap:5px}
-.key-stat{font-size:10.5px;font-weight:600;color:#fff;background:var(--g800);padding:3px 9px;border-radius:20px}
+.stat-chip{font-size:10.5px;font-weight:600;color:#fff;background:var(--g800);padding:3px 9px;border-radius:20px}
 
-/* Read more button */
-.read-more{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--g800);background:var(--g50);padding:8px 15px;border-radius:24px;text-decoration:none;border:1px solid var(--g100);align-self:flex-start;flex-shrink:0}
-.read-more:active{background:var(--g100)}
+/* ── Read more button ── */
+.btn-read{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;
+  color:var(--g800);background:var(--g50);
+  padding:8px 15px;border-radius:24px;
+  text-decoration:none;border:1px solid var(--g100);
+  align-self:flex-start;flex-shrink:0;
+}
+.btn-read:active{background:var(--g100)}
 
-/* Card footer */
-.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid var(--bdr);flex-shrink:0;margin-top:auto}
-.vb{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px}
+/* ── Card footer ── */
+.c-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:10px;border-top:0.5px solid var(--bdr);
+  flex-shrink:0;margin-top:auto;
+}
+.vbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px}
 .vdot{width:5px;height:5px;border-radius:50%}
-.hi{background:#E8F5E9;color:#2E7D32}.hi .vdot{background:#4CAF50}
-.md{background:#FFF8E1;color:#E65100}.md .vdot{background:#FF9800}
+.vhi{background:#E8F5E9;color:#2E7D32}.vhi .vdot{background:#4CAF50}
+.vmd{background:#FFF8E1;color:#E65100}.vmd .vdot{background:#FF9800}
 .swipe-hint{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:3px}
 
-/* Load more button for learning */
-.load-more-card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f8faf8;gap:14px;transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .38s}
-.load-more-card.hd{transform:translateY(-100%);opacity:0;pointer-events:none}
-.load-more-card.hu{transform:translateY(100%);opacity:0;pointer-events:none}
-.load-more-card.on{transform:translateY(0);opacity:1}
-.lm-icon{font-size:44px}
+/* ── Load more ── */
+.loadmore{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#f7faf7;gap:14px;
+  transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .35s;
+}
+.loadmore.exit-up   {transform:translateY(-100%);opacity:0;pointer-events:none}
+.loadmore.enter-down{transform:translateY(100%); opacity:0;pointer-events:none}
+.loadmore.active    {transform:translateY(0);    opacity:1}
+.lm-emoji{font-size:44px}
 .lm-title{font-size:16px;font-weight:700;color:var(--t1)}
 .lm-sub{font-size:13px;color:var(--t3);text-align:center;max-width:240px;line-height:1.6}
 .lm-btn{background:var(--g900);color:#fff;border:none;padding:13px 32px;border-radius:24px;font-size:14px;font-weight:700;cursor:pointer}
 
-/* Nav */
+/* ── Nav ── */
 .nav-btns{display:flex;border-top:0.5px solid var(--bdr);flex-shrink:0;background:#fff}
-.nb{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:#fff;border:none;font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;transition:background .15s}
+.nb{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px;background:#fff;border:none;
+  font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;transition:background .15s;
+}
 .nb:first-child{border-right:0.5px solid var(--bdr)}
-.nb:active,.nb:hover{background:var(--g50);color:var(--g800)}
+.nb:not(:disabled):hover,.nb:not(:disabled):active{background:var(--g50);color:var(--g800)}
 .nb:disabled{opacity:.3;cursor:default}
-.nb:disabled:hover{background:#fff;color:var(--t3)}
 
-/* Sources */
+/* ── Sources bar ── */
 .src-bar{flex-shrink:0;background:#fafafa;border-top:0.5px solid var(--bdr);padding:5px 12px;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
 .src-bar::-webkit-scrollbar{display:none}
 .src-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-right:6px}
 .src-pill{display:inline-block;font-size:9px;color:var(--t2);background:#fff;border:0.5px solid var(--bdr);padding:2px 7px;border-radius:20px;margin-right:3px}
 
-/* Skeleton */
-.sk-img{width:100%;height:44%;background:#e8e8e8;position:relative;overflow:hidden;flex-shrink:0}
-.sk-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);background-size:300% 100%;animation:shim 1.4s infinite}
+/* ── Skeleton ── */
+.sk-card{position:absolute;inset:0;display:flex;flex-direction:column;background:#fff}
+.sk-img{width:100%;height:44%;background:#ddd;position:relative;overflow:hidden;flex-shrink:0}
+.sk-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 25%,rgba(255,255,255,.5) 50%,transparent 75%);background-size:300% 100%;animation:shim 1.4s infinite}
 .sk-body{flex:1;padding:14px;display:flex;flex-direction:column;gap:12px}
-.sk-line{height:12px;border-radius:5px;background:linear-gradient(90deg,#ececec 25%,#d8d8d8 50%,#ececec 75%);background-size:300% 100%;animation:shim 1.4s infinite}
-.sk-s{width:30%}.sk-l{width:100%}.sk-m{width:65%}.sk-xl{width:100%;height:55px}
+.sk-line{height:13px;border-radius:5px;background:linear-gradient(90deg,#ececec 25%,#d8d8d8 50%,#ececec 75%);background-size:300% 100%;animation:shim 1.4s infinite}
+.sk-s{width:30%}.sk-l{width:100%}.sk-m{width:65%}.sk-xl{width:100%;height:56px}
 @keyframes shim{0%{background-position:100% 50%}100%{background-position:-100% 50%}}
 
-/* Error */
-.err-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:24px;text-align:center;gap:10px}
-.retry-btn{background:var(--g900);color:#fff;border:none;padding:10px 26px;border-radius:24px;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px}
+/* ── Error ── */
+.err-card{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#fff;padding:24px;text-align:center;gap:12px;
+}
+.err-emoji{font-size:38px}
+.err-title{font-size:15px;font-weight:700;color:var(--t1)}
+.err-msg{font-size:12.5px;color:var(--t3);line-height:1.65;max-width:270px}
+.err-retry{background:var(--g900);color:#fff;border:none;padding:11px 26px;border-radius:24px;font-size:13px;font-weight:600;cursor:pointer}
 
-/* Toast */
+/* ── File:// warning ── */
+.file-warn{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#fff;padding:24px;text-align:center;gap:12px;
+}
+.file-warn h3{font-size:15px;font-weight:700;color:#B71C1C}
+.file-warn p{font-size:13px;color:var(--t2);line-height:1.7;max-width:280px}
+.file-warn code{background:#f4f4f4;padding:2px 7px;border-radius:5px;font-size:12px}
+
+/* ── Toast ── */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;font-size:12px;padding:8px 16px;border-radius:24px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div class="app">
+
+  <!-- Header -->
   <div class="hdr">
     <div class="hdr-top">
       <div class="logo">
@@ -146,8 +226,11 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;font-family:-ap
       </div>
       <div class="hright">
         <div class="live"></div>
-        <button class="ibtn" id="rfBtn" title="Refresh / Load more">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        <button class="ibtn" id="rfBtn" title="Refresh">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+          </svg>
         </button>
       </div>
     </div>
@@ -158,7 +241,7 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;font-family:-ap
       </button>
       <button class="tab" data-t="tech">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-        Tech & Innovation
+        Tech &amp; Innovation
       </button>
       <button class="tab" data-t="learn">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -167,13 +250,16 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;font-family:-ap
     </div>
   </div>
 
+  <!-- Counter bar -->
   <div class="counter">
     <span id="cText">Loading…</span>
     <div class="cdots" id="cDots"></div>
   </div>
 
+  <!-- Cards -->
   <div class="card-wrap" id="cardWrap"></div>
 
+  <!-- Nav -->
   <div class="nav-btns">
     <button class="nb" id="prevBtn" disabled>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
@@ -185,6 +271,7 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;font-family:-ap
     </button>
   </div>
 
+  <!-- Sources -->
   <div class="src-bar">
     <span class="src-label">Sources:</span>
     <span class="src-pill">Reuters</span><span class="src-pill">BBC</span>
@@ -195,79 +282,74 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;font-family:-ap
     <span class="src-pill">PV Magazine</span><span class="src-pill">Mercom India</span>
     <span class="src-pill">Electrek</span><span class="src-pill">IRENA</span>
     <span class="src-pill">IEA</span><span class="src-pill">Bloomberg NEF</span>
-    <span class="src-pill">Wood Mackenzie</span><span class="src-pill">MIT Technology Review</span>
+    <span class="src-pill">Wood Mackenzie</span><span class="src-pill">MIT Tech Review</span>
     <span class="src-pill">Nature Energy</span><span class="src-pill">AP News</span>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════
-// PASTE YOUR GROQ API KEY BELOW (keep the quotes)
+// ══════════════════════════════════════════
+// PASTE YOUR GROQ API KEY HERE (keep quotes)
 const GROQ_KEY = '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';
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 
-const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MDL = 'llama-3.3-70b-versatile';
-const CACHE_MS = 20 * 60 * 1000;
+const GROQ_URL  = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const CACHE_MS  = 20 * 60 * 1000; // 20 min cache
 
-// ── Pexels free image collections per topic ───────────────
-// Using curated Pexels collection IDs + search for relevant images
-const IMG_QUERIES = {
-  // News categories
-  'Solar Tender':       'solar-panels-farm',
-  'Wind Auction':       'wind-turbines',
-  'Green Finance':      'renewable-energy',
-  'Project Commission': 'solar-power-plant',
-  'Policy Update':      'clean-energy',
-  'Power Trading':      'power-grid',
-  'M&A Deal':           'solar-energy',
-  'Offshore Wind':      'offshore-wind',
-  'Grid Expansion':     'electricity-grid',
-  'Rooftop Solar':      'rooftop-solar',
-  'Solar Tech':         'solar-technology',
-  'Battery Innovation': 'battery-storage',
-  'Green Hydrogen':     'hydrogen-energy',
-  'Offshore Wind Tech': 'wind-energy',
-  'Grid Technology':    'smart-grid',
-  'EV Technology':      'electric-car',
-  'Energy Storage':     'energy-storage',
-  'Carbon Tech':        'clean-energy',
-  'Smart Grid':         'solar-panels',
-  'Agrivoltaics':       'solar-farm',
-  'Wave Energy':        'ocean-energy',
-  'Building Solar':     'solar-building',
-  // Learning categories
-  'Solar Energy':       'solar-panels',
-  'Wind Energy':        'wind-turbines',
-  'Battery Storage':    'battery-energy',
-  'Grid & Systems':     'power-grid',
-  'Hydrogen':           'renewable-energy',
-  'EV & Transport':     'electric-vehicle',
-  'Ocean Energy':       'ocean-waves',
-  'Solar Technology':   'solar-technology',
-  'Energy Policy':      'clean-energy',
-  'Climate Science':    'renewable-energy',
+// ── Image URLs ────────────────────────────────────────────
+// Curated Unsplash photo IDs — direct permanent URLs, always load, free, no API key
+const CAT_PHOTOS = {
+  'Solar Tender':      ['1509391366360-2e959784a276','1497440001374-f26997328c1b','1548337138-e87d889cc369','1559302504-2e7484673ff0'],
+  'Wind Auction':      ['1466611653911-95081537e5b7','1467579424161-6bbc141569d7','1508193638397-1c4234db14d8','1473341304170-971dccb5ac1e'],
+  'Green Finance':     ['1460925895917-afdab827c52f','1509391366360-2e959784a276','1473341304170-971dccb5ac1e','1497440001374-f26997328c1b'],
+  'Project Commission':['1497440001374-f26997328c1b','1509391366360-2e959784a276','1548337138-e87d889cc369','1459767129954-d0cb016b5574'],
+  'Policy Update':     ['1473341304170-971dccb5ac1e','1466611653911-95081537e5b7','1509391366360-2e959784a276','1460925895917-afdab827c52f'],
+  'Power Trading':     ['1548337138-e87d889cc369','1459767129954-d0cb016b5574','1473341304170-971dccb5ac1e','1509391366360-2e959784a276'],
+  'M&A Deal':          ['1460925895917-afdab827c52f','1509391366360-2e959784a276','1466611653911-95081537e5b7','1473341304170-971dccb5ac1e'],
+  'Offshore Wind':     ['1467579424161-6bbc141569d7','1466611653911-95081537e5b7','1508193638397-1c4234db14d8','1548337138-e87d889cc369'],
+  'Grid Expansion':    ['1459767129954-d0cb016b5574','1548337138-e87d889cc369','1473341304170-971dccb5ac1e','1509391366360-2e959784a276'],
+  'Rooftop Solar':     ['1559302504-2e7484673ff0','1497440001374-f26997328c1b','1509391366360-2e959784a276','1548337138-e87d889cc369'],
+  'Solar Tech':        ['1509391366360-2e959784a276','1497440001374-f26997328c1b','1559302504-2e7484673ff0','1548337138-e87d889cc369'],
+  'Battery Innovation':['1593941707882-a5bba14938c7','1473341304170-971dccb5ac1e','1548337138-e87d889cc369','1460925895917-afdab827c52f'],
+  'Green Hydrogen':    ['1473341304170-971dccb5ac1e','1509391366360-2e959784a276','1460925895917-afdab827c52f','1466611653911-95081537e5b7'],
+  'Offshore Wind Tech':['1467579424161-6bbc141569d7','1466611653911-95081537e5b7','1508193638397-1c4234db14d8','1473341304170-971dccb5ac1e'],
+  'Grid Technology':   ['1459767129954-d0cb016b5574','1473341304170-971dccb5ac1e','1509391366360-2e959784a276','1548337138-e87d889cc369'],
+  'EV Technology':     ['1593941707882-a5bba14938c7','1460925895917-afdab827c52f','1473341304170-971dccb5ac1e','1509391366360-2e959784a276'],
+  'Energy Storage':    ['1593941707882-a5bba14938c7','1548337138-e87d889cc369','1473341304170-971dccb5ac1e','1460925895917-afdab827c52f'],
+  'Carbon Tech':       ['1473341304170-971dccb5ac1e','1466611653911-95081537e5b7','1509391366360-2e959784a276','1548337138-e87d889cc369'],
+  'Smart Grid':        ['1459767129954-d0cb016b5574','1548337138-e87d889cc369','1509391366360-2e959784a276','1473341304170-971dccb5ac1e'],
+  'Agrivoltaics':      ['1497440001374-f26997328c1b','1559302504-2e7484673ff0','1509391366360-2e959784a276','1548337138-e87d889cc369'],
+  'Wave Energy':       ['1467579424161-6bbc141569d7','1473341304170-971dccb5ac1e','1548337138-e87d889cc369','1508193638397-1c4234db14d8'],
+  'Building Solar':    ['1559302504-2e7484673ff0','1509391366360-2e959784a276','1497440001374-f26997328c1b','1548337138-e87d889cc369'],
+  'Solar Energy':      ['1509391366360-2e959784a276','1497440001374-f26997328c1b','1548337138-e87d889cc369','1559302504-2e7484673ff0'],
+  'Wind Energy':       ['1466611653911-95081537e5b7','1467579424161-6bbc141569d7','1508193638397-1c4234db14d8','1548337138-e87d889cc369'],
+  'Battery Storage':   ['1593941707882-a5bba14938c7','1473341304170-971dccb5ac1e','1548337138-e87d889cc369','1460925895917-afdab827c52f'],
+  'Grid & Systems':    ['1459767129954-d0cb016b5574','1473341304170-971dccb5ac1e','1509391366360-2e959784a276','1548337138-e87d889cc369'],
+  'Hydrogen':          ['1473341304170-971dccb5ac1e','1509391366360-2e959784a276','1460925895917-afdab827c52f','1548337138-e87d889cc369'],
+  'EV & Transport':    ['1593941707882-a5bba14938c7','1460925895917-afdab827c52f','1473341304170-971dccb5ac1e','1509391366360-2e959784a276'],
+  'Ocean Energy':      ['1467579424161-6bbc141569d7','1508193638397-1c4234db14d8','1473341304170-971dccb5ac1e','1548337138-e87d889cc369'],
+  'Energy Policy':     ['1473341304170-971dccb5ac1e','1509391366360-2e959784a276','1460925895917-afdab827c52f','1548337138-e87d889cc369'],
 };
+const DEFAULT_PHOTOS = ['1509391366360-2e959784a276','1466611653911-95081537e5b7','1548337138-e87d889cc369','1473341304170-971dccb5ac1e'];
 
-// Unsplash for images — reliable, free, no API key needed
-function getImg(category, seed) {
-  const q = encodeURIComponent(IMG_QUERIES[category] || 'renewable energy solar');
-  // Use different seed each time for variety
-  const s = (seed || 0) + Math.floor(Date.now() / 86400000); // changes daily
-  return `https://source.unsplash.com/featured/900x600/?${q}&sig=${s}`;
+function getImgUrl(cat, idx) {
+  const pool = CAT_PHOTOS[cat] || DEFAULT_PHOTOS;
+  const id   = pool[idx % pool.length];
+  return `https://images.unsplash.com/photo-${id}?w=900&h=500&fit=crop&auto=format&q=80`;
 }
 
 // ── State ─────────────────────────────────────────────────
-let curTab     = 'industry';
-let loading    = false;
-let cache      = {};
-let arts       = [];
-let learnArts  = [];
-let curIdx     = 0;
-let startY     = 0;
-// Track which learning topics we've already generated so we don't repeat
-let learnTopicsUsed = [];
+let curTab    = 'industry';
+let tabLoading = {}; // per-tab loading flag — fixes stuck loading bug
+let cache     = {};
+let arts      = [];
+let learnArts = [];
+let curIdx    = 0;
+let startY    = 0;
+let learnUsed = [];
 
 const $wrap   = document.getElementById('cardWrap');
 const $cText  = document.getElementById('cText');
@@ -278,6 +360,12 @@ const $toast  = document.getElementById('toast');
 
 // ── Init ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Check if running from file:// — show warning
+  if (location.protocol === 'file:') {
+    showFileWarning();
+    return;
+  }
+
   document.querySelectorAll('.tab').forEach(b =>
     b.addEventListener('click', () => switchTab(b.dataset.t)));
 
@@ -286,226 +374,239 @@ document.addEventListener('DOMContentLoaded', () => {
     b.classList.add('spin');
     setTimeout(() => b.classList.remove('spin'), 700);
     if (curTab === 'learn') {
-      // Refresh = load more NEW learning topics
       loadLearn(true);
     } else {
-      cache = {};
+      delete cache[curTab];
       loadTab(curTab);
     }
   });
 
   $prev.addEventListener('click', () => nav(-1));
   $next.addEventListener('click', () => nav(1));
-  $wrap.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+  $wrap.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, {passive:true});
   $wrap.addEventListener('touchend', e => {
-    const d = startY - e.changedTouches[0].clientY;
-    if (Math.abs(d) > 50) nav(d > 0 ? 1 : -1);
-  }, { passive: true });
+    const diff = startY - e.changedTouches[0].clientY;
+    if (Math.abs(diff) > 50) nav(diff > 0 ? 1 : -1);
+  }, {passive:true});
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') nav(1);
-    if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  nav(-1);
+    if (e.key==='ArrowDown'||e.key==='ArrowRight') nav(1);
+    if (e.key==='ArrowUp'  ||e.key==='ArrowLeft')  nav(-1);
   });
 
   loadTab('industry');
 });
 
-// ── Tab switching ─────────────────────────────────────────
+// ── Tab switch ────────────────────────────────────────────
 function switchTab(t) {
-  curTab = t; curIdx = 0;
+  if (t === curTab) return;
+  curTab = t;
+  curIdx = 0;
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.t === t));
 
   if (t === 'learn') {
     if (learnArts.length > 0) {
       arts = learnArts;
-      renderAll('learn');
+      showCardAt(0, 'enter-down', 'learn');
+      updCounter(`1 of ${arts.length}`, 0);
+      $prev.disabled = true;
+      $next.disabled = false;
     } else {
       loadLearn(false);
     }
-  } else if (cache[t] && Date.now() - cache[t].ts < CACHE_MS) {
-    arts = cache[t].data;
-    renderAll('news');
   } else {
-    loadTab(t);
+    if (cache[t] && (Date.now() - cache[t].ts) < CACHE_MS) {
+      arts = cache[t].data;
+      showCardAt(0, 'enter-down', 'news');
+      updCounter(`1 of ${arts.length}`, 0);
+      $prev.disabled = true;
+      $next.disabled = arts.length <= 1;
+    } else {
+      loadTab(t);
+    }
   }
 }
 
-// ── Load news/tech ────────────────────────────────────────
+// ── Load news / tech ──────────────────────────────────────
 async function loadTab(tab) {
-  if (loading) return;
-  loading = true;
+  if (tabLoading[tab]) return; // per-tab lock
+  tabLoading[tab] = true;
   showSkel();
-  updCounter('Loading…', 0);
+  updCounter('Loading news…', 0);
 
-  const today = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  const today = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'});
 
-  const IND_PROMPT = `You are the editor of REPower News. Today is ${today}.
+  const IND = `You are editor of REPower News. Today: ${today}.
 
-Generate exactly 8 INDUSTRY & BUSINESS renewable energy news articles. Topics must include: government policy, SECI/MNRE tenders, capacity auctions, project commissioning, company investments, financing deals, PPAs, tariff orders, regulatory approvals.
+Generate 20 INDUSTRY & BUSINESS renewable energy news articles.
+Topics: government policy, SECI/MNRE tenders, capacity auctions, project commissioning, company investments, financing deals, PPAs, tariff orders, regulatory approvals, M&A, IPO.
+India companies: Adani Green, NTPC Renewable, ReNew Power, Tata Power Solar, Greenko, Torrent Power, JSW Energy, Azure Power, Acme Solar.
+Global companies: Orsted, Vestas, Siemens Gamesa, Shell, BP, Equinor, RWE, Enel, NextEra Energy, Iberdrola.
+Mix 10 India + 10 global articles. Each article must cover a COMPLETELY DIFFERENT company/topic/project.
 
-India companies: Adani Green Energy, NTPC Renewable, ReNew Power, Tata Power Solar, Greenko, Torrent Power, JSW Energy, Azure Power, Acme Solar, Amp Energy
-Global companies: Orsted, Vestas, Siemens Gamesa, Shell, BP, Equinor, RWE, Enel, NextEra Energy, Iberdrola
+Return ONLY a JSON array. Each item has these exact keys:
+headline, summary, source, url, category, region, validity, validityReason, timeAgo
 
-Mix: 4 India articles + 4 global articles. Each DIFFERENT company/topic.
+Rules:
+- headline: max 12 words
+- summary: 75-85 words. Start with company name + key fact. Include MW/GW, ₹crore or $billion amounts, location, timeline, significance.
+- source: one of Economic Times|Business Standard|Livemint|Financial Express|Reuters|Bloomberg|The Hindu|Times of India|NDTV|Hindustan Times|Mercom India|PV Magazine|Financial Times|AP News
+- url: realistic URL from that source
+- category: one of Solar Tender|Wind Auction|Green Finance|Project Commission|Policy Update|Power Trading|M&A Deal|Offshore Wind|Grid Expansion|Rooftop Solar
+- region: India or Global or Europe or US or Southeast Asia or Middle East
+- validity: 8
+- validityReason: Industry publication cited
+- timeAgo: 1h ago to 20h ago
 
-Return ONLY a valid JSON array. Each object must have:
-{
-  "headline": "compelling news headline maximum 12 words",
-  "summary": "75-85 word detailed summary. Begin with company/organization name and the most important fact. Include specific MW/GW capacity figures, investment amounts in crore rupees or billion USD, project location, commissioning timeline, and why this matters for India's or global renewable energy target. Write complete sentences with full context.",
-  "source": "one of: Economic Times | Business Standard | Livemint | Financial Express | Reuters | Bloomberg | The Hindu | Times of India | NDTV | Hindustan Times | Mercom India | PV Magazine | Financial Times | AP News",
-  "url": "https://realistic-url-from-source.com/article-about-topic",
-  "category": "one of: Solar Tender | Wind Auction | Green Finance | Project Commission | Policy Update | Power Trading | M&A Deal | Offshore Wind | Grid Expansion | Rooftop Solar",
-  "region": "India or Global or Europe or US or Southeast Asia or Middle East",
-  "validity": 8,
-  "validityReason": "Industry publication cited",
-  "timeAgo": "between 1h ago and 20h ago"
-}
+Return valid JSON array only. No markdown. No extra text:`;
 
-JSON array only. No markdown. No explanation. Start with [:`;
+  const TECH = `You are editor of REPower News. Today: ${today}.
 
-  const TECH_PROMPT = `You are the editor of REPower News. Today is ${today}.
+Generate 20 TECHNOLOGY & INNOVATION renewable energy articles.
+Cover 20 completely different topics from: perovskite solar cells, solid-state batteries, sodium-ion batteries, green hydrogen electrolyzers, floating offshore wind, iron-air long-duration storage, AI in grid management, building-integrated PV, agrivoltaics, wave energy, vehicle-to-grid, virtual power plants, compressed air storage, green ammonia.
+Institutions: NREL, MIT, IIT, Fraunhofer, Tesla Energy, QuantumScape, Northvolt, Form Energy, Nel Hydrogen, ITM Power, LONGi, Siemens Energy.
 
-Generate exactly 8 TECHNOLOGY & INNOVATION renewable energy articles covering breakthroughs, R&D results, efficiency world records, new product launches, university research findings, next-generation technology demonstrations.
+Return ONLY a JSON array. Each item has these exact keys:
+headline, summary, source, url, category, region, validity, validityReason, timeAgo
 
-Cover 8 COMPLETELY DIFFERENT topics from: perovskite solar cells, solid-state batteries, sodium-ion batteries, green hydrogen electrolyzers, floating offshore wind platforms, iron-air long-duration storage, AI-powered grid management, building-integrated photovoltaics (BIPV), agrivoltaics, wave energy converters, vehicle-to-grid (V2G), virtual power plants, compressed air energy storage, green ammonia.
+Rules:
+- headline: max 12 words
+- summary: 75-85 words. Start with institution/company + breakthrough. Include efficiency %, cost/kWh, improvement %, commercialisation timeline, real-world impact.
+- source: one of CleanTechnica|Electrek|PV Magazine|IRENA|IEA|Solar Power World|Green Tech Media|Bloomberg NEF|MIT Technology Review|Nature Energy|Science Daily|Wood Mackenzie|Canary Media|RE World
+- url: realistic URL from that source
+- category: one of Solar Tech|Battery Innovation|Green Hydrogen|Offshore Wind Tech|Grid Technology|EV Technology|Energy Storage|Carbon Tech|Smart Grid|Agrivoltaics|Wave Energy|Building Solar
+- region: Global or Europe or US or India or Asia
+- validity: 8
+- validityReason: Research institution data
+- timeAgo: 2h ago to 22h ago
 
-Key institutions: NREL (USA), MIT, IIT Delhi/Bombay/Madras, Fraunhofer ISE, Tesla Energy, QuantumScape, Northvolt, Form Energy, Bloom Energy, Nel Hydrogen, ITM Power, LONGi Solar, Siemens Energy.
-
-Return ONLY a valid JSON array. Each object must have:
-{
-  "headline": "technology news headline maximum 12 words",
-  "summary": "75-85 word detailed summary. Begin with the institution/company name. Describe the specific breakthrough clearly. Include exact technical metrics (efficiency %, cost per kWh, MW capacity, % improvement over previous record). Explain the significance and realistic commercialisation timeline. Write in accessible but informative language.",
-  "source": "one of: CleanTechnica | Electrek | PV Magazine | IRENA | IEA | Solar Power World | Green Tech Media | Bloomberg NEF | MIT Technology Review | Nature Energy | Science Daily | Wood Mackenzie | Canary Media | RE World",
-  "url": "https://realistic-url-from-source.com/article-about-technology",
-  "category": "one of: Solar Tech | Battery Innovation | Green Hydrogen | Offshore Wind Tech | Grid Technology | EV Technology | Energy Storage | Carbon Tech | Smart Grid | Agrivoltaics | Wave Energy | Building Solar",
-  "region": "Global or Europe or US or India or Asia",
-  "validity": 8,
-  "validityReason": "Research institution data",
-  "timeAgo": "between 2h ago and 22h ago"
-}
-
-JSON array only. No markdown. No explanation. Start with [:`;
+Return valid JSON array only. No markdown. No extra text:`;
 
   try {
     const res = await fetch(GROQ_URL, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${GROQ_KEY}`, 'Content-Type': 'application/json' },
+      headers: {'Authorization':`Bearer ${GROQ_KEY}`,'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: GROQ_MDL,
-        messages: [{ role: 'user', content: tab === 'industry' ? IND_PROMPT : TECH_PROMPT }],
+        model: GROQ_MODEL,
+        messages: [{role:'user', content: tab==='industry' ? IND : TECH}],
         temperature: 0.75,
-        max_tokens: 5000,
+        max_tokens: 10000,
       }),
     });
 
-    if (!res.ok) throw new Error(`Groq API error ${res.status}. Check your API key.`);
+    if (res.status === 401) throw new Error('Invalid Groq API key. Please update the key in the code.');
+    if (res.status === 429) throw new Error('Rate limit reached. Wait 30 seconds and refresh.');
+    if (!res.ok)            throw new Error(`Groq API error ${res.status}`);
 
     const data   = await res.json();
     const text   = data.choices?.[0]?.message?.content || '';
     const parsed = safeJSON(text);
-    if (!parsed?.length) throw new Error('Could not parse news. Please refresh.');
+    if (!parsed?.length) throw new Error('AI response could not be parsed. Please refresh.');
 
-    cache[tab] = { data: parsed, ts: Date.now() };
-    arts = parsed; curIdx = 0;
-    renderAll('news');
-    toast('✅ News updated');
+    cache[tab] = {data: parsed, ts: Date.now()};
+    arts = parsed;
+    curIdx = 0;
+    showCardAt(0, 'enter-down', 'news');
+    updCounter(`1 of ${arts.length}`, 0);
+    $prev.disabled = true;
+    $next.disabled = arts.length <= 1;
+    showToast('✅ News updated');
 
-  } catch(e) {
-    showError(x(e.message));
-  } finally { loading = false; }
+  } catch(err) {
+    console.error(tab, err);
+    showError(err.message);
+  } finally {
+    tabLoading[tab] = false;
+  }
 }
 
-// ── Load learning cards ───────────────────────────────────
+// ── Load learning ─────────────────────────────────────────
 async function loadLearn(append) {
-  if (loading) return;
-  loading = true;
-  if (!append) { showSkel(); updCounter('Generating learning content…', 0); }
-  else { showSkelOverlay(); }
+  if (tabLoading['learn']) return;
+  tabLoading['learn'] = true;
 
-  // Rotate through topics so we never repeat
+  if (!append) {
+    showSkel();
+    updCounter('Generating learning cards…', 0);
+  } else {
+    updCounter('Loading more topics…', curIdx);
+  }
+
   const ALL_TOPICS = [
-    'How solar photovoltaic panels work — photoelectric effect, cell types, efficiency',
-    'How wind turbines generate electricity — rotor aerodynamics, gearbox, generator',
-    'How lithium-ion battery storage works — chemistry, charging cycles, grid applications',
+    'How solar PV panels convert sunlight into electricity using the photoelectric effect',
+    'How wind turbines work — rotor aerodynamics, gearbox, generator, pitch control',
+    'How lithium-ion battery storage works — charging cycles, BMS, grid applications',
     'How the electricity grid works — frequency regulation, transmission, load balancing',
-    'Green hydrogen production — electrolysis, PEM vs alkaline, cost curve to 2030',
-    'How offshore wind farms are built — foundations, installation, floating platforms',
-    'Solar panel manufacturing process — from sand to silicon to finished module',
-    'What is a Power Purchase Agreement (PPA) and how does it work in India',
-    'How electric vehicles work — motor types, regenerative braking, charging standards',
-    'What are perovskite solar cells and why are they exciting',
-    'How agrivoltaics combines solar energy with farming — dual land use benefits',
-    'What is vehicle-to-grid (V2G) technology — EVs as grid batteries',
-    'How carbon capture works alongside renewable energy systems',
-    'What is a virtual power plant (VPP) and how AI manages distributed energy',
-    'How tidal and wave energy converters harvest ocean power',
-    'Understanding solar irradiance — why some locations generate more solar energy',
-    'What is the levelised cost of energy (LCOE) — how to compare energy sources',
-    'How pumped hydro storage works — the oldest grid-scale battery',
-    'What is net metering — how rooftop solar owners sell power back to the grid',
-    'Understanding capacity factor — why a 100 MW solar plant doesn\'t always produce 100 MW',
-    'How smart meters and demand response reduce electricity costs',
-    'What is ISTS waiver and why it matters for India\'s renewable energy growth',
-    'How bifacial solar panels capture light from both sides',
-    'What is green ammonia and its role in decarbonising shipping and fertilisers',
-    'How microgrids work — energy independence for villages and islands',
-    'Understanding India\'s Renewable Purchase Obligation (RPO) targets',
-    'How solid-state batteries differ from lithium-ion — safety and energy density',
-    'What is BESS (Battery Energy Storage System) and how it supports the grid',
-    'How floating solar farms work on reservoirs and lakes',
-    'Understanding the duck curve — why solar creates grid challenges at sunset',
+    'Green hydrogen production using electrolysis — PEM vs alkaline electrolyzers',
+    'How offshore wind farms are designed, installed and connected to shore',
+    'What is a Power Purchase Agreement (PPA) and how it works in India',
+    'How electric vehicles work — motors, regenerative braking, charging levels',
+    'What are perovskite solar cells and why they are the next big thing in solar',
+    'How agrivoltaics combines solar panels with farming for dual land use',
+    'What is vehicle-to-grid (V2G) technology and how EVs stabilise the grid',
+    'How pumped hydro storage works — the world oldest grid-scale battery',
+    'What is net metering and how rooftop solar owners earn from surplus power',
+    'Understanding capacity factor — why actual solar and wind output varies',
+    'How smart meters and demand response help balance renewable energy grids',
+    'What is India ISTS waiver and why it made solar and wind cheaper',
+    'How bifacial solar panels generate power from both sides',
+    'What is green ammonia and its role in shipping and fertiliser decarbonisation',
+    'How microgrids provide energy independence to villages and islands',
+    'Understanding India Renewable Purchase Obligation (RPO) targets',
+    'How solid-state batteries improve on lithium-ion safety and energy density',
+    'What is a BESS — Battery Energy Storage System — and how it helps the grid',
+    'How floating solar farms work on water bodies and why they are efficient',
+    'Understanding the duck curve — why solar power creates a grid challenge at sunset',
+    'What is green steel and how hydrogen replaces coal in blast furnaces',
+    'How tidal stream turbines capture predictable ocean energy',
+    'What is direct air carbon capture and how it combines with renewable energy',
+    'How virtual power plants aggregate millions of small energy sources with AI',
+    'What is compressed air energy storage and how large caves store electricity',
+    'Understanding India National Green Hydrogen Mission targets and incentives',
   ];
 
-  const remaining = ALL_TOPICS.filter(t => !learnTopicsUsed.includes(t));
-  // If all used, reset
-  if (remaining.length < 5) { learnTopicsUsed = []; }
+  const unused = ALL_TOPICS.filter(t => !learnUsed.includes(t));
+  if (unused.length < 5) learnUsed = []; // reset when exhausted
+  const pool = unused.length > 0 ? unused : ALL_TOPICS;
+  const chosen = [...pool].sort(() => Math.random()-0.5).slice(0,6);
+  learnUsed.push(...chosen);
 
-  const available = remaining.length > 0 ? remaining : ALL_TOPICS;
-  // Pick 6 random topics
-  const shuffled = [...available].sort(() => Math.random() - 0.5);
-  const chosen   = shuffled.slice(0, 6);
-  learnTopicsUsed.push(...chosen);
+  const LEARN = `You are a renewable energy educator for REPower News app.
 
-  const LEARN_PROMPT = `You are a renewable energy educator creating engaging, informative learning cards for an app called REPower News.
+Create 6 learning cards, one for each topic below:
+${chosen.map((t,i)=>`${i+1}. ${t}`).join('\n')}
 
-Generate exactly 6 learning cards, one for each of these topics:
-${chosen.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+Return ONLY a valid JSON array. Each item must have these exact keys:
+title, category, difficulty, intro, point1, point2, point3, stats, readUrl, readLabel
 
-Each card must be educational, accurate, and engaging — suitable for professionals, students, and curious readers interested in renewable energy.
+Rules:
+- title: clear educational title max 10 words
+- category: one of Solar Energy|Wind Energy|Battery Storage|Grid & Systems|Hydrogen|EV & Transport|Ocean Energy|Energy Policy
+- difficulty: exactly one of Beginner or Intermediate or Advanced
+- intro: 65-75 word engaging introduction explaining why this topic matters for energy transition
+- point1: object with keys "heading" (emoji + title) and "text" (55-65 words of explanation, use analogies)
+- point2: object with keys "heading" (emoji + title) and "text" (55-65 words, build on point1)
+- point3: object with keys "heading" (emoji + title) and "text" (55-65 words, include India-specific context)
+- stats: array of 4 short fact strings including India data e.g. "India: 90 GW solar (2024)"
+- readUrl: real URL from IRENA, IEA, MNRE, NREL, or reputable institution
+- readLabel: short text like "Explore at IRENA"
 
-Return ONLY a valid JSON array. Each object must have:
-{
-  "topic": "topic number from the list above (1-6)",
-  "category": "one of: Solar Energy | Wind Energy | Battery Storage | Grid & Systems | Hydrogen | EV & Transport | Ocean Energy | Solar Technology | Energy Policy | Climate Science",
-  "difficulty": "Beginner or Intermediate or Advanced",
-  "diffCode": "beg or int or adv",
-  "headline": "engaging educational title for this concept — max 10 words",
-  "intro": "60-70 word engaging introduction that hooks the reader and explains why this topic matters for the energy transition. Write as if speaking to a curious professional.",
-  "concept1_title": "First key concept title with an emoji",
-  "concept1_text": "55-65 word clear explanation of first concept. Use analogies where helpful. Include specific technical detail.",
-  "concept2_title": "Second key concept title with an emoji",
-  "concept2_text": "55-65 word clear explanation of second concept. Build on the first concept.",
-  "concept3_title": "Third key concept title with an emoji",
-  "concept3_text": "55-65 word clear explanation of third concept. Include India-specific context where relevant.",
-  "stats": ["4 to 5 key statistics as short strings, include India data where relevant, e.g. 'India: 90 GW solar installed (2024)'"],
-  "learnMoreUrl": "https://real-authoritative-url (IRENA, IEA, MNRE, NREL, or reputable institution)",
-  "learnMoreLabel": "short label like 'Explore at IRENA' or 'Read at IEA'"
-}
-
-JSON array only. No markdown. No explanation. Start with [:`;
+Return valid JSON array only. No markdown. No extra text:`;
 
   try {
     const res = await fetch(GROQ_URL, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${GROQ_KEY}`, 'Content-Type': 'application/json' },
+      headers: {'Authorization':`Bearer ${GROQ_KEY}`,'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: GROQ_MDL,
-        messages: [{ role: 'user', content: LEARN_PROMPT }],
+        model: GROQ_MODEL,
+        messages: [{role:'user', content: LEARN}],
         temperature: 0.7,
         max_tokens: 6000,
       }),
     });
 
-    if (!res.ok) throw new Error(`Groq API error ${res.status}`);
+    if (res.status === 401) throw new Error('Invalid Groq API key. Please update the key in the code.');
+    if (res.status === 429) throw new Error('Rate limit. Wait 30 seconds and refresh.');
+    if (!res.ok)            throw new Error(`Groq API error ${res.status}`);
 
     const data   = await res.json();
     const text   = data.choices?.[0]?.message?.content || '';
@@ -514,184 +615,169 @@ JSON array only. No markdown. No explanation. Start with [:`;
 
     if (append) {
       learnArts = [...learnArts, ...parsed];
-      // Go to first new card
-      curIdx = learnArts.length - parsed.length;
+      curIdx    = learnArts.length - parsed.length;
     } else {
       learnArts = parsed;
-      curIdx = 0;
+      curIdx    = 0;
     }
-
     arts = learnArts;
-    renderLearnAt(curIdx);
-    toast(`✅ ${parsed.length} new learning cards added`);
 
-  } catch(e) {
-    showError(x(e.message));
-  } finally { loading = false; }
+    showCardAt(curIdx, 'enter-down', 'learn');
+    updCounter(`${curIdx+1} of ${arts.length}`, curIdx);
+    $prev.disabled = curIdx === 0;
+    $next.disabled = false;
+    showToast(`✅ ${parsed.length} new learning cards ready`);
+
+  } catch(err) {
+    console.error('learn', err);
+    showError(err.message);
+  } finally {
+    tabLoading['learn'] = false;
+  }
 }
 
 // ── Navigation ────────────────────────────────────────────
 function nav(dir) {
   const nxt = curIdx + dir;
 
-  // At the last learning card — show "load more" prompt
+  // Learning: show load-more at the end
   if (curTab === 'learn' && nxt >= arts.length) {
-    showLoadMoreCard();
+    animateOut(dir);
+    showLoadMore();
     return;
   }
-
   if (nxt < 0 || nxt >= arts.length) return;
 
-  const old = $wrap.querySelector('.card.on, .load-more-card.on');
-  if (old) { old.classList.remove('on'); old.classList.add(dir > 0 ? 'hd' : 'hu'); setTimeout(() => old.remove(), 420); }
-
+  const type = curTab === 'learn' ? 'learn' : 'news';
+  animateOut(dir);
   curIdx = nxt;
-  if (curTab === 'learn') showLearnCard(curIdx, dir > 0 ? 'hu' : 'hd');
-  else showNewsCard(curIdx, dir > 0 ? 'hu' : 'hd');
-
-  updCounter(`${curIdx + 1} of ${arts.length}`, curIdx);
+  showCardAt(curIdx, dir > 0 ? 'enter-down' : 'enter-up', type);
+  updCounter(`${curIdx+1} of ${arts.length}`, curIdx);
   $prev.disabled = curIdx === 0;
-  $next.disabled = false; // always allow next for learning (load more)
-  if (curTab !== 'learn') $next.disabled = curIdx === arts.length - 1;
+  $next.disabled = curTab !== 'learn' && curIdx === arts.length-1;
 }
 
-// ── Render news card ──────────────────────────────────────
-function showNewsCard(idx, from) {
-  const a   = arts[idx];
+function animateOut(dir) {
+  const old = $wrap.querySelector('.card.active, .loadmore.active');
+  if (!old) return;
+  old.classList.remove('active');
+  old.classList.add(dir > 0 ? 'exit-up' : 'exit-down');
+  setTimeout(() => old.remove(), 420);
+}
+
+// ── Show card ─────────────────────────────────────────────
+function showCardAt(idx, from, type) {
+  // Remove old skeleton/error
+  const sk = $wrap.querySelector('.sk-card, .err-card, .file-warn');
+  if (sk) sk.remove();
+
+  if (type === 'learn') buildLearnCard(arts[idx], idx, from);
+  else                  buildNewsCard(arts[idx], idx, from);
+}
+
+function buildNewsCard(a, idx, from) {
+  if (!a) return;
   const v   = Number(a.validity) || 7;
-  const bc  = v >= 8 ? 'hi' : 'md';
+  const vc  = v >= 8 ? 'vhi' : 'vmd';
   const vt  = v >= 8 ? `Verified · ${v}/10` : `Moderate · ${v}/10`;
-  const img = getImg(a.category, idx);
+  const img = getImgUrl(a.category, idx);
 
   const card = document.createElement('div');
   card.className = `card ${from}`;
   card.innerHTML = `
     <div class="card-img">
       <img src="${img}" alt="${x(a.category)}"
-        onload="this.classList.add('loaded')"
-        onerror="this.src='https://source.unsplash.com/featured/900x600/?solar+energy&sig=${idx}'">
-      <div class="ov"></div>
-      <div class="cat-b">${x(a.category)}</div>
-      <div class="src-b">${x(a.source)}</div>
-      <div class="img-m"><span>${x(a.region)}</span><span>${x(a.timeAgo)}</span></div>
+        onload="this.classList.add('vis')"
+        onerror="this.src='https://images.unsplash.com/photo-1509391366360-2e959784a276?w=900&h=500&fit=crop'">
+      <div class="img-grad"></div>
+      <div class="badge-cat">${x(a.category)}</div>
+      <div class="badge-src">${x(a.source)}</div>
+      <div class="badge-meta">
+        <span>${x(a.region)}</span>
+        <span>${x(a.timeAgo)}</span>
+      </div>
     </div>
     <div class="card-body">
-      <div class="headline">${x(a.headline)}</div>
-      <div class="summary">${x(a.summary)}</div>
-      ${a.url ? `<a href="${x(a.url)}" target="_blank" rel="noopener" class="read-more">
+      <div class="c-headline">${x(a.headline)}</div>
+      <div class="c-summary">${x(a.summary)}</div>
+      ${a.url ? `<a href="${x(a.url)}" target="_blank" rel="noopener" class="btn-read">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Read full article
       </a>` : ''}
-      <div class="card-foot">
-        <div class="vb ${bc}"><div class="vdot"></div>${vt}</div>
+      <div class="c-foot">
+        <div class="vbadge ${vc}"><div class="vdot"></div>${vt}</div>
         <div class="swipe-hint">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-          Swipe or arrows
+          Swipe or use arrows
         </div>
       </div>
     </div>`;
-
   $wrap.appendChild(card);
-  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.replace(from, 'on')));
+  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.replace(from, 'active')));
 }
 
-// ── Render learning card ──────────────────────────────────
-function showLearnCard(idx, from) {
-  const a   = arts[idx];
-  const img = getImg(a.category, idx + 100);
-  const dc  = a.diffCode || 'beg';
+function buildLearnCard(a, idx, from) {
+  if (!a) return;
+  const dc  = a.difficulty === 'Advanced' ? 'diff-adv' : a.difficulty === 'Intermediate' ? 'diff-int' : 'diff-beg';
+  const img = getImgUrl(a.category, idx + 500);
+  const p1  = a.point1 || {};
+  const p2  = a.point2 || {};
+  const p3  = a.point3 || {};
+  const stats = Array.isArray(a.stats) ? a.stats : [];
 
   const card = document.createElement('div');
   card.className = `card ${from}`;
   card.innerHTML = `
     <div class="card-img">
       <img src="${img}" alt="${x(a.category)}"
-        onload="this.classList.add('loaded')"
-        onerror="this.src='https://source.unsplash.com/featured/900x600/?renewable+energy&sig=${idx+100}'">
-      <div class="ov"></div>
-      <div class="cat-b">${x(a.category)}</div>
-      <div class="src-b">Learning Tech</div>
-      <div class="diff-b ${dc}">${x(a.difficulty)}</div>
+        onload="this.classList.add('vis')"
+        onerror="this.src='https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=900&h=500&fit=crop'">
+      <div class="img-grad"></div>
+      <div class="badge-cat">${x(a.category)}</div>
+      <div class="badge-src">Learning Tech</div>
+      <div class="badge-diff ${dc}">${x(a.difficulty)}</div>
     </div>
     <div class="card-body">
-      <div class="headline">${x(a.headline)}</div>
-      <div class="summary">${x(a.intro)}</div>
-      <div class="concept-block">
-        <div class="concept-title">${x(a.concept1_title)}</div>
-        <div class="concept-text">${x(a.concept1_text)}</div>
-      </div>
-      <div class="concept-block">
-        <div class="concept-title">${x(a.concept2_title)}</div>
-        <div class="concept-text">${x(a.concept2_text)}</div>
-      </div>
-      <div class="concept-block">
-        <div class="concept-title">${x(a.concept3_title)}</div>
-        <div class="concept-text">${x(a.concept3_text)}</div>
-      </div>
-      ${a.stats && a.stats.length ? `
-      <div class="stats-row">
-        ${a.stats.map(s => `<span class="key-stat">${x(s)}</span>`).join('')}
-      </div>` : ''}
-      ${a.learnMoreUrl ? `<a href="${x(a.learnMoreUrl)}" target="_blank" rel="noopener" class="read-more">
+      <div class="c-headline">${x(a.title)}</div>
+      <div class="c-summary">${x(a.intro)}</div>
+      ${p1.heading ? `<div class="cblock"><div class="cblock-title">${x(p1.heading)}</div><div class="cblock-text">${x(p1.text)}</div></div>` : ''}
+      ${p2.heading ? `<div class="cblock"><div class="cblock-title">${x(p2.heading)}</div><div class="cblock-text">${x(p2.text)}</div></div>` : ''}
+      ${p3.heading ? `<div class="cblock"><div class="cblock-title">${x(p3.heading)}</div><div class="cblock-text">${x(p3.text)}</div></div>` : ''}
+      ${stats.length ? `<div class="stats-row">${stats.map(s=>`<span class="stat-chip">${x(s)}</span>`).join('')}</div>` : ''}
+      ${a.readUrl ? `<a href="${x(a.readUrl)}" target="_blank" rel="noopener" class="btn-read">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        ${x(a.learnMoreLabel || 'Learn more')}
+        ${x(a.readLabel || 'Learn more')}
       </a>` : ''}
-      <div class="card-foot">
-        <div class="vb hi"><div class="vdot"></div>AI Generated</div>
+      <div class="c-foot">
+        <div class="vbadge vhi"><div class="vdot"></div>AI Generated</div>
         <div class="swipe-hint">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           Swipe for more
         </div>
       </div>
     </div>`;
-
   $wrap.appendChild(card);
-  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.replace(from, 'on')));
+  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.replace(from, 'active')));
 }
 
-// ── Load more card ────────────────────────────────────────
-function showLoadMoreCard() {
-  const old = $wrap.querySelector('.card.on, .load-more-card.on');
-  if (old) { old.classList.remove('on'); old.classList.add('hd'); setTimeout(() => old.remove(), 420); }
-
-  const card = document.createElement('div');
-  card.className = 'load-more-card hu';
-  card.innerHTML = `
-    <div class="lm-icon">📚</div>
+function showLoadMore() {
+  const el = document.createElement('div');
+  el.className = 'loadmore enter-down';
+  el.innerHTML = `
+    <div class="lm-emoji">📚</div>
     <div class="lm-title">You've read all ${arts.length} cards!</div>
-    <div class="lm-sub">Tap below to generate 6 more learning cards on new renewable energy topics</div>
-    <button class="lm-btn" onclick="loadMoreLearn()">Load More Topics →</button>`;
-
-  $wrap.appendChild(card);
-  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.replace('hu', 'on')));
-  updCounter(`${arts.length} of ${arts.length} · tap for more`, arts.length - 1);
-  $next.disabled = true;
+    <div class="lm-sub">Tap below to generate 6 more learning cards on new topics</div>
+    <button class="lm-btn" onclick="loadLearn(true)">Load More Topics →</button>`;
+  $wrap.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.replace('enter-down','active')));
+  updCounter(`All ${arts.length} read · load more below`, arts.length-1);
   $prev.disabled = false;
-}
-
-function loadMoreLearn() { loadLearn(true); }
-
-// ── Render helpers ────────────────────────────────────────
-function renderAll(type) {
-  $wrap.innerHTML = ''; curIdx = 0;
-  if (type === 'learn') showLearnCard(0, 'hu');
-  else showNewsCard(0, 'hu');
-  updCounter(`1 of ${arts.length}`, 0);
-  $prev.disabled = true;
-  $next.disabled = arts.length <= 1;
-}
-
-function renderLearnAt(idx) {
-  $wrap.innerHTML = '';
-  showLearnCard(idx, 'hu');
-  updCounter(`${idx + 1} of ${arts.length}`, idx);
-  $prev.disabled = idx === 0;
-  $next.disabled = false;
+  $next.disabled = true;
 }
 
 function showSkel() {
   $wrap.innerHTML = `
-    <div class="card on">
+    <div class="sk-card">
       <div class="sk-img"></div>
       <div class="sk-body">
         <div class="sk-line sk-s"></div>
@@ -704,23 +790,39 @@ function showSkel() {
   $prev.disabled = true; $next.disabled = true;
 }
 
-function showSkelOverlay() {
-  // Don't clear existing cards — overlay loading on top
-  updCounter('Loading more topics…', curIdx);
-}
-
 function showError(msg) {
   $wrap.innerHTML = `
-    <div class="err-wrap">
-      <div style="font-size:36px">⚠️</div>
-      <p style="font-size:15px;font-weight:700;color:#1a1a1a;margin:8px 0 4px">Could not load content</p>
-      <p style="font-size:12.5px;color:#888;line-height:1.65;max-width:260px;margin:0 auto">${msg}</p>
-      <button class="retry-btn" onclick="retry()">Try Again</button>
+    <div class="err-card">
+      <div class="err-emoji">⚠️</div>
+      <div class="err-title">Could not load content</div>
+      <div class="err-msg">${x(msg)}</div>
+      <button class="err-retry" onclick="retryLoad()">Try Again</button>
     </div>`;
-  updCounter('Error', 0);
+  updCounter('Error — tap Try Again', 0);
+  $prev.disabled = true; $next.disabled = true;
 }
-function retry() { if (curTab === 'learn') loadLearn(false); else { cache = {}; loadTab(curTab); } }
 
+function showFileWarning() {
+  $wrap.innerHTML = `
+    <div class="file-warn">
+      <div style="font-size:38px">⚠️</div>
+      <h3>Cannot run from desktop</h3>
+      <p>
+        This app makes API calls that browsers block when opening directly from your computer.<br><br>
+        <strong>Upload to GitHub Pages and open that URL instead:</strong><br><br>
+        Your app URL should look like:<br>
+        <code>https://yourname.github.io/repower-news</code>
+      </p>
+    </div>`;
+  updCounter('Please use GitHub Pages URL', 0);
+}
+
+function retryLoad() {
+  if (curTab === 'learn') loadLearn(false);
+  else { delete cache[curTab]; loadTab(curTab); }
+}
+
+// ── Helpers ───────────────────────────────────────────────
 function updCounter(txt, idx) {
   $cText.textContent = txt;
   $cDots.innerHTML   = '';
@@ -733,22 +835,23 @@ function updCounter(txt, idx) {
 }
 
 function safeJSON(t) {
-  for (const fn of [
+  const attempts = [
     () => JSON.parse(t.trim()),
-    () => JSON.parse(t.replace(/```json|```/g, '').trim()),
+    () => JSON.parse(t.replace(/```json|```/g,'').trim()),
     () => { const m = t.match(/\[[\s\S]*\]/); if (m) return JSON.parse(m[0]); throw 0; },
-  ]) { try { return fn(); } catch {} }
+  ];
+  for (const fn of attempts) { try { return fn(); } catch {} }
   return null;
 }
 
-function toast(m, ms = 2500) {
+function showToast(m, ms=2500) {
   $toast.textContent = m;
   $toast.classList.add('show');
   setTimeout(() => $toast.classList.remove('show'), ms);
 }
 
 function x(s) {
-  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 </body>
