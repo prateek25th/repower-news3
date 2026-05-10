@@ -7,6 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="REPower">
+<link rel="manifest" href="/manifest.json">
 <title>REPower News</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -19,9 +20,10 @@
 html,body{height:100%;width:100%;overflow:hidden;background:#111;
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
   -webkit-font-smoothing:antialiased}
-.app{display:flex;flex-direction:column;height:100vh;width:100%;max-width:640px;margin:0 auto;background:#f4f6f4}
+.app{display:flex;flex-direction:column;height:100vh;width:100%;
+  max-width:640px;margin:0 auto;background:#f4f6f4}
 
-/* Header */
+/* ── Header ── */
 .hdr{flex-shrink:0;background:var(--g900);box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:100}
 .hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 7px}
 .logo{display:flex;align-items:center;gap:7px;color:#fff;font-size:16px}
@@ -29,124 +31,149 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;
 .hright{display:flex;align-items:center;gap:8px}
 .live{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:pulse 2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(76,175,80,.5)}70%{box-shadow:0 0 0 5px rgba(76,175,80,0)}100%{box-shadow:0 0 0 0 rgba(76,175,80,0)}}
-.ibtn{background:rgba(255,255,255,.12);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ibtn{background:rgba(255,255,255,.12);border:none;color:#fff;width:32px;height:32px;
+  border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .ibtn:active{background:rgba(255,255,255,.25)}
 .spin svg{animation:rot .6s linear}
 @keyframes rot{to{transform:rotate(360deg)}}
 
-/* Tabs */
+/* ── Tabs ── */
 .tabs{display:flex;border-top:1px solid rgba(255,255,255,.1)}
-.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 4px;background:none;border:none;border-bottom:2.5px solid transparent;color:rgba(255,255,255,.5);font-size:10.5px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 4px;
+  background:none;border:none;border-bottom:2.5px solid transparent;
+  color:rgba(255,255,255,.5);font-size:10.5px;font-weight:500;cursor:pointer;
+  white-space:nowrap;transition:all .2s}
 .tab.on{color:#fff;border-bottom-color:var(--g100)}
 
-/* Counter */
-.counter{flex-shrink:0;background:#fff;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:5px 14px;font-size:11px;color:var(--t3)}
+/* ── Counter ── */
+.counter{flex-shrink:0;background:#fff;border-bottom:0.5px solid var(--bdr);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:5px 14px;font-size:11px;color:var(--t3)}
 .cdots{display:flex;gap:4px;align-items:center}
 .cdot{width:5px;height:5px;border-radius:50%;background:var(--bdr);transition:all .2s}
 .cdot.on{background:var(--g800);width:14px;border-radius:3px}
 
-/* Card area */
+/* ── Card wrap ── */
 .card-wrap{flex:1;overflow:hidden;position:relative}
 
-/* Card */
+/* ── Card ── */
 .card{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--card);
   transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .3s}
 .card.eu{transform:translateY(-100%);opacity:0;pointer-events:none}
 .card.ed{transform:translateY(100%); opacity:0;pointer-events:none}
 .card.on{transform:translateY(0);    opacity:1}
 
-/* Image - news cards */
+/* ── Card image ── */
 .card-img{width:100%;height:42%;flex-shrink:0;position:relative;overflow:hidden;background:#1a2a1a}
-/* Image - learning cards (smaller so content visible) */
 .learn-img{width:100%;height:28%;flex-shrink:0;position:relative;overflow:hidden;background:#1a2a1a}
 .card-img img,.learn-img img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;display:block}
 .card-img img.vis,.learn-img img.vis{opacity:1}
-.img-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05),rgba(0,0,0,.68))}
-.badge-cat{position:absolute;top:10px;left:10px;background:var(--g900);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;z-index:2}
-.badge-src{position:absolute;bottom:9px;left:10px;font-size:9px;font-weight:700;color:#fff;background:rgba(27,94,32,.9);padding:3px 8px;border-radius:20px;z-index:2}
-.badge-meta{position:absolute;bottom:9px;right:10px;display:flex;gap:4px;z-index:2}
-.badge-meta span{font-size:9px;color:rgba(255,255,255,.92);background:rgba(0,0,0,.42);padding:2px 7px;border-radius:20px}
-.badge-diff{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;z-index:2}
-.diff-beg{background:#1565C0;color:#fff}
-.diff-int{background:#E65100;color:#fff}
-.diff-adv{background:#B71C1C;color:#fff}
+.img-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05),rgba(0,0,0,.7))}
+.b-cat{position:absolute;top:10px;left:10px;background:var(--g900);color:#fff;
+  font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.5px;z-index:2}
+.b-src{position:absolute;bottom:9px;left:10px;font-size:9px;font-weight:700;color:#fff;
+  background:rgba(27,94,32,.9);padding:3px 8px;border-radius:20px;z-index:2}
+.b-meta{position:absolute;bottom:9px;right:10px;display:flex;gap:4px;z-index:2}
+.b-meta span{font-size:9px;color:rgba(255,255,255,.92);background:rgba(0,0,0,.42);
+  padding:2px 7px;border-radius:20px}
+.b-diff{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;
+  padding:3px 9px;border-radius:20px;z-index:2}
+.d-beg{background:#1565C0;color:#fff}
+.d-int{background:#E65100;color:#fff}
+.d-adv{background:#B71C1C;color:#fff}
 
-/* Card body */
-.card-body{flex:1;overflow-y:auto;padding:13px 14px 10px;display:flex;flex-direction:column;gap:9px;
-  scrollbar-width:thin;scrollbar-color:var(--bdr) transparent}
+/* ── Card body ── */
+.card-body{flex:1;overflow-y:auto;padding:13px 14px 10px;display:flex;flex-direction:column;
+  gap:9px;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent}
 .card-body::-webkit-scrollbar{width:3px}
 .card-body::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
 .c-head{font-size:15px;font-weight:800;color:var(--t1);line-height:1.4}
-.c-sum{font-size:13.5px;color:var(--t2);line-height:1.75}
+.c-body{font-size:13.5px;color:var(--t2);line-height:1.75}
 
-/* Concept blocks */
+/* ── Concept blocks (learning) ── */
 .cblock{background:#f7faf7;border-radius:10px;padding:10px 12px;border:0.5px solid var(--bdr)}
 .cblock-t{font-size:12px;font-weight:700;color:var(--g800);margin-bottom:4px}
 .cblock-b{font-size:13px;color:var(--t2);line-height:1.68}
 
-/* Stats */
+/* ── Stats ── */
 .stats-row{display:flex;flex-wrap:wrap;gap:5px}
-.stat-chip{font-size:10.5px;font-weight:600;color:#fff;background:var(--g800);padding:3px 9px;border-radius:20px}
+.stat-chip{font-size:10.5px;font-weight:600;color:#fff;background:var(--g800);
+  padding:3px 9px;border-radius:20px}
 
-/* Action button */
-.btn-action{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--g800);background:var(--g50);padding:8px 14px;border-radius:24px;text-decoration:none;border:1px solid var(--g100);align-self:flex-start;flex-shrink:0}
-.btn-action:active{background:var(--g100)}
+/* ── Action button ── */
+.btn-act{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+  color:var(--g800);background:var(--g50);padding:8px 14px;border-radius:24px;
+  text-decoration:none;border:1px solid var(--g100);align-self:flex-start;flex-shrink:0}
+.btn-act:active{background:var(--g100)}
 
-/* Footer */
-.c-foot{display:flex;align-items:center;justify-content:space-between;padding-top:9px;border-top:0.5px solid var(--bdr);flex-shrink:0;margin-top:auto}
-.vbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px}
+/* ── Card footer ── */
+.c-foot{display:flex;align-items:center;justify-content:space-between;
+  padding-top:9px;border-top:0.5px solid var(--bdr);flex-shrink:0;margin-top:auto}
+.vbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;
+  padding:3px 9px;border-radius:20px}
 .vdot{width:5px;height:5px;border-radius:50%}
 .vhi{background:#E8F5E9;color:#2E7D32}.vhi .vdot{background:#4CAF50}
 .vmd{background:#FFF8E1;color:#E65100}.vmd .vdot{background:#FF9800}
 .swipe-hint{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:3px}
 
-/* Load more */
-.loadmore{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7faf7;gap:14px;
+/* ── Load more ── */
+.loadmore{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:#f7faf7;gap:14px;
   transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .3s}
 .loadmore.eu{transform:translateY(-100%);opacity:0;pointer-events:none}
 .loadmore.ed{transform:translateY(100%); opacity:0;pointer-events:none}
 .loadmore.on{transform:translateY(0);    opacity:1}
-.lm-emoji{font-size:44px}
-.lm-title{font-size:16px;font-weight:700;color:var(--t1);text-align:center;padding:0 16px}
-.lm-sub{font-size:13px;color:var(--t3);text-align:center;max-width:240px;line-height:1.6}
-.lm-btn{background:var(--g900);color:#fff;border:none;padding:13px 28px;border-radius:24px;font-size:14px;font-weight:700;cursor:pointer}
+.lm-btn{background:var(--g900);color:#fff;border:none;padding:12px 28px;
+  border-radius:24px;font-size:14px;font-weight:700;cursor:pointer}
 
-/* Nav */
+/* ── Nav ── */
 .nav-btns{display:flex;border-top:0.5px solid var(--bdr);flex-shrink:0;background:#fff}
-.nb{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:#fff;border:none;font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;transition:background .15s}
+.nb{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;
+  background:#fff;border:none;font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;transition:background .15s}
 .nb:first-child{border-right:0.5px solid var(--bdr)}
 .nb:not(:disabled):hover,.nb:not(:disabled):active{background:var(--g50);color:var(--g800)}
 .nb:disabled{opacity:.3;cursor:default}
 
-/* Sources */
-.src-bar{flex-shrink:0;background:#fafafa;border-top:0.5px solid var(--bdr);padding:5px 12px;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+/* ── Sources bar ── */
+.src-bar{flex-shrink:0;background:#fafafa;border-top:0.5px solid var(--bdr);
+  padding:5px 12px;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
 .src-bar::-webkit-scrollbar{display:none}
-.src-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-right:6px}
-.src-pill{display:inline-block;font-size:9px;color:var(--t2);background:#fff;border:0.5px solid var(--bdr);padding:2px 7px;border-radius:20px;margin-right:3px}
+.src-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;
+  letter-spacing:.5px;margin-right:6px}
+.src-pill{display:inline-block;font-size:9px;color:var(--t2);background:#fff;
+  border:0.5px solid var(--bdr);padding:2px 7px;border-radius:20px;margin-right:3px}
 
-/* Skeleton */
+/* ── Skeleton ── */
 .sk-card{position:absolute;inset:0;display:flex;flex-direction:column;background:#fff}
 .sk-img{width:100%;height:42%;background:#ddd;position:relative;overflow:hidden;flex-shrink:0}
-.sk-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 25%,rgba(255,255,255,.5) 50%,transparent 75%);background-size:300% 100%;animation:shim 1.4s infinite}
+.sk-img::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 25%,rgba(255,255,255,.5) 50%,transparent 75%);
+  background-size:300% 100%;animation:shim 1.4s infinite}
 .sk-body{flex:1;padding:14px;display:flex;flex-direction:column;gap:12px}
-.sk-line{height:13px;border-radius:5px;background:linear-gradient(90deg,#ececec 25%,#d8d8d8 50%,#ececec 75%);background-size:300% 100%;animation:shim 1.4s infinite}
+.sk-line{height:13px;border-radius:5px;
+  background:linear-gradient(90deg,#ececec 25%,#d8d8d8 50%,#ececec 75%);
+  background-size:300% 100%;animation:shim 1.4s infinite}
 .sk-s{width:30%}.sk-l{width:100%}.sk-m{width:65%}.sk-xl{width:100%;height:56px}
 @keyframes shim{0%{background-position:100% 50%}100%{background-position:-100% 50%}}
 
-/* Loading overlay message */
-.loading-msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.92);gap:14px;z-index:5}
-.loading-spinner{width:36px;height:36px;border:3px solid var(--g100);border-top-color:var(--g800);border-radius:50%;animation:rot .8s linear infinite}
-.loading-text{font-size:13px;color:var(--t2);text-align:center;max-width:240px;line-height:1.6}
+/* ── Loading overlay ── */
+.loading-overlay{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:rgba(255,255,255,.9);gap:14px;z-index:5}
+.spinner{width:36px;height:36px;border:3px solid var(--g100);border-top-color:var(--g800);
+  border-radius:50%;animation:rot .8s linear infinite}
+.loading-txt{font-size:13px;color:var(--t2);text-align:center;max-width:220px;line-height:1.6}
 
-/* Error */
-.err-card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:24px;text-align:center;gap:12px}
-.err-retry{background:var(--g900);color:#fff;border:none;padding:11px 26px;border-radius:24px;font-size:13px;font-weight:600;cursor:pointer}
+/* ── Error ── */
+.err-card{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:#fff;padding:24px;text-align:center;gap:12px}
+.err-retry{background:var(--g900);color:#fff;border:none;padding:11px 26px;
+  border-radius:24px;font-size:13px;font-weight:600;cursor:pointer}
 
-/* file:// warning */
-.file-warn{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:24px;text-align:center;gap:12px}
-
-/* Toast */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;font-size:12px;padding:8px 16px;border-radius:24px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999}
+/* ── Toast ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#1a1a1a;color:#fff;font-size:12px;padding:8px 16px;border-radius:24px;
+  opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -191,7 +218,9 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;
     <span id="cText">Loading…</span>
     <div class="cdots" id="cDots"></div>
   </div>
+
   <div class="card-wrap" id="cardWrap"></div>
+
   <div class="nav-btns">
     <button class="nb" id="prevBtn" disabled>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
@@ -202,47 +231,37 @@ html,body{height:100%;width:100%;overflow:hidden;background:#111;
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </button>
   </div>
+
   <div class="src-bar">
     <span class="src-label">Sources:</span>
     <span class="src-pill">Economic Times</span><span class="src-pill">Business Standard</span>
-    <span class="src-pill">Livemint</span><span class="src-pill">The Hindu</span>
-    <span class="src-pill">Times of India</span><span class="src-pill">NDTV</span>
     <span class="src-pill">Solar Quarter</span><span class="src-pill">Mercom India</span>
+    <span class="src-pill">The Hindu</span><span class="src-pill">Times of India</span>
+    <span class="src-pill">Livemint</span><span class="src-pill">NDTV</span>
     <span class="src-pill">PV Magazine</span><span class="src-pill">Reuters</span>
     <span class="src-pill">Bloomberg</span><span class="src-pill">CleanTechnica</span>
-    <span class="src-pill">Electrek</span><span class="src-pill">IRENA</span>
-    <span class="src-pill">IEA</span><span class="src-pill">Bloomberg NEF</span>
-    <span class="src-pill">Wood Mackenzie</span><span class="src-pill">MIT Tech Review</span>
-    <span class="src-pill">Down To Earth</span><span class="src-pill">Business Line</span>
+    <span class="src-pill">IRENA</span><span class="src-pill">IEA</span>
+    <span class="src-pill">Bloomberg NEF</span><span class="src-pill">Electrek</span>
+    <span class="src-pill">Wood Mackenzie</span><span class="src-pill">Down To Earth</span>
+    <span class="src-pill">Business Line</span><span class="src-pill">MIT Tech Review</span>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════════
-// STEP 1: Get free Gemini key at aistudio.google.com
-//         Sign in → Get API Key → Create API Key
-// STEP 2: Paste it below (keep the quotes)
-const GEMINI_KEY = 'AIzaSyDkQvK0DMQHF7Ck631AzHYLmrq2sEoZ4Jg';
-// ════════════════════════════════════════════════════
-
-// Gemini API — completely free, 15 req/min, 1M tokens/day
-// We make only ONE call that loads ALL THREE tabs at once
-// Result cached for 24 hours → almost zero chance of rate limits
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
-// API key passed as x-goog-api-key header (correct per Google docs)
-
-// 24 hour cache — one API call per day per user
-const CACHE_MS = 24 * 60 * 60 * 1000;
+// ── Config ────────────────────────────────────────────────
+const API_URL  = '/api/news';     // Calls Vercel serverless function (same domain)
+const CACHE_MS = 2 * 60 * 60 * 1000; // 2 hour cache
 
 // ── Images: curated Unsplash photo IDs ───────────────────
 const PHOTOS = {
   solar:   ['1509391366360-2e959784a276','1497440001374-f26997328c1b','1548337138-e87d889cc369','1559302504-2e7484673ff0','1460925895917-afdab827c52f'],
   wind:    ['1466611653911-95081537e5b7','1467579424161-6bbc141569d7','1508193638397-1c4234db14d8','1473341304170-971dccb5ac1e'],
   battery: ['1593941707882-a5bba14938c7','1473341304170-971dccb5ac1e','1548337138-e87d889cc369','1460925895917-afdab827c52f'],
-  grid:    ['1459767129954-d0cb016b5574','1473341304170-971dccb5ac1e','1548337138-e87d889cc369','1460925895917-afdab827c52f'],
-  ev:      ['1593941707882-a5bba14938c7','1460925895917-afdab827c52f','1473341304170-971dccb5ac1e','1509391366360-2e959784a276'],
-  ocean:   ['1467579424161-6bbc141569d7','1508193638397-1c4234db14d8','1473341304170-971dccb5ac1e','1466611653911-95081537e5b7'],
+  grid:    ['1459767129954-d0cb016b5574','1473341304170-971dccb5ac1e','1548337138-e87d889cc369','1509391366360-2e959784a276'],
+  ev:      ['1593941707882-a5bba14938c7','1460925895917-afdab827c52f','1473341304170-971dccb5ac1e'],
+  ocean:   ['1467579424161-6bbc141569d7','1508193638397-1c4234db14d8','1473341304170-971dccb5ac1e'],
   general: ['1509391366360-2e959784a276','1466611653911-95081537e5b7','1473341304170-971dccb5ac1e','1548337138-e87d889cc369'],
 };
 const CAT_POOL = {
@@ -268,14 +287,13 @@ function getImg(cat, idx) {
 }
 
 // ── State ─────────────────────────────────────────────────
-let curTab    = 'industry';
-let isLoading = false;
-let allData   = null; // {industry:[], tech:[], learn:[]}
+let curTab = 'industry';
+let isLoad = false;
+let allData = null;
 let learnArts = [];
-let arts      = [];
-let curIdx    = 0;
-let startY    = 0;
-let learnUsed = [];
+let arts = [];
+let curIdx = 0;
+let startY = 0;
 
 const $wrap  = document.getElementById('cardWrap');
 const $cText = document.getElementById('cText');
@@ -286,8 +304,6 @@ const $toast = document.getElementById('toast');
 
 // ── Init ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  if (location.protocol === 'file:') { showFileWarn(); return; }
-
   document.querySelectorAll('.tab').forEach(b =>
     b.addEventListener('click', () => switchTab(b.dataset.t)));
 
@@ -295,11 +311,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const b = document.getElementById('rfBtn');
     b.classList.add('spin');
     setTimeout(() => b.classList.remove('spin'), 700);
-    // Force refresh — clear cache and reload
-    try { localStorage.removeItem('rp_alldata'); } catch(e) {}
+    clearCache();
     allData = null;
-    isLoading = false;
-    loadAllData();
+    isLoad  = false;
+    fetchNews();
   });
 
   $prev.addEventListener('click', () => nav(-1));
@@ -314,21 +329,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  nav(-1);
   });
 
-  // Try loading from cache first, else fetch
+  // Load from cache or fetch fresh
   const cached = getCache();
   if (cached) {
-    allData = cached;
-    showTabData('industry');
+    allData   = cached;
+    learnArts = cached.learn || [];
+    showTab('industry');
     showToast('📦 Showing cached news · tap ↺ to refresh');
   } else {
-    loadAllData();
+    fetchNews();
   }
 });
 
 // ── Cache ─────────────────────────────────────────────────
 function getCache() {
   try {
-    const raw = localStorage.getItem('rp_alldata');
+    const raw = localStorage.getItem('rp_v2_cache');
     if (!raw) return null;
     const { data, ts } = JSON.parse(raw);
     if (Date.now() - ts > CACHE_MS) return null;
@@ -336,7 +352,12 @@ function getCache() {
   } catch { return null; }
 }
 function setCache(data) {
-  try { localStorage.setItem('rp_alldata', JSON.stringify({ data, ts: Date.now() })); } catch(e) {}
+  try {
+    localStorage.setItem('rp_v2_cache', JSON.stringify({ data, ts: Date.now() }));
+  } catch(e) { console.warn('Cache write failed:', e); }
+}
+function clearCache() {
+  try { localStorage.removeItem('rp_v2_cache'); } catch {}
 }
 
 // ── Tab switch ────────────────────────────────────────────
@@ -344,285 +365,109 @@ function switchTab(t) {
   curTab = t;
   curIdx = 0;
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.t === t));
-
-  if (!allData) { loadAllData(); return; }
-
-  if (t === 'learn') {
-    if (learnArts.length === 0) learnArts = allData.learn || [];
-    arts = learnArts;
-  } else {
-    arts = allData[t] || [];
-  }
-
-  if (arts.length === 0) {
-    showError(`No content for this tab. Tap ↺ to refresh.`, loadAllData);
-    return;
-  }
-
-  renderFirst(t);
+  if (!allData) { fetchNews(); return; }
+  showTab(t);
 }
 
-// ── ONE API CALL — loads all 3 tabs at once ───────────────
-async function loadAllData() {
-  if (isLoading) return;
-  isLoading = true;
-  showLoadingMsg('Fetching renewable energy news…\nThis loads all 3 tabs in one go.');
-  updCounter('Loading all content…', 0);
+function showTab(t) {
+  arts = t === 'learn'
+    ? (learnArts.length ? learnArts : allData?.learn || [])
+    : (allData?.[t] || []);
 
-  const today = new Date().toLocaleDateString('en-IN', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-  });
+  if (!arts.length) {
+    showError(`No content for "${t}" tab. Tap ↺ to refresh.`);
+    return;
+  }
+  renderFirst();
+}
 
-  const prompt = `You are editor of REPower News. Today is ${today}.
-
-Generate content for a renewable energy news app with 3 sections. Return ONLY a single valid JSON object with exactly 3 keys: "industry", "tech", "learn".
-
-═══ SECTION 1: "industry" ═══
-Array of 8 objects. Renewable energy INDUSTRY & BUSINESS news from last 7 days.
-Cover diverse topics — NOT just tenders. Include:
-- Leadership changes (CEO/MD/board appointments in RE companies)  
-- What India ministers/govt said about RE sector (MNRE, Power Ministry)
-- New regulations (MNRE circulars, CERC/SERC orders, policy changes)
-- Newspaper headlines about RE sector
-- Company earnings, fundraising, IPOs, partnerships
-- International RE deals and climate finance
-- Solar/wind capacity additions and records
-- Grid infrastructure and transmission updates
-- Manufacturing news (PLI scheme, import duties, domestic production)
-- Green bonds and sustainability-linked financing
-
-India entities: Adani Green, NTPC Renewable, ReNew Power, Tata Power Solar, Greenko, Torrent Power, JSW Energy, Waaree Energies, Premier Energies, Vikram Solar, SECI, MNRE, IREDA, CERC.
-Global: Orsted, Vestas, Siemens Gamesa, Shell, BP, Equinor, RWE, Enel, NextEra, Iberdrola.
-Mix: 5 India + 3 global. All different topics.
-
-Each industry object: {"headline":"max 12 words","summary":"80 word detailed summary starting with entity name, include specific figures and why it matters","source":"one of: Economic Times|Business Standard|Livemint|Financial Express|The Hindu|Times of India|Business Line|Solar Quarter|Mercom India|PV Magazine|NDTV|Hindustan Times|Reuters|Bloomberg|AP News|Down To Earth","searchQuery":"6 words + year 2025 for Google News search","category":"one of: Solar Tender|Wind Auction|Green Finance|Project Commission|Policy Update|Leadership Change|Regulation|Market Analysis|Company Results|International Deal|Grid Infrastructure|Manufacturing|Rooftop Solar|Energy Storage","region":"India or Global or Europe or US","validity":8,"validityReason":"Industry source cited","timeAgo":"1h ago to 6 days ago"}
-
-═══ SECTION 2: "tech" ═══
-Array of 8 objects. TECHNOLOGY & INNOVATION in renewable energy, last 7 days.
-Cover 8 completely different topics from: perovskite solar, tandem solar cells, solid-state batteries, sodium-ion batteries, green hydrogen electrolyzers, floating offshore wind, iron-air storage, AI grid management, building-integrated PV, agrivoltaics, wave energy, vehicle-to-grid, virtual power plants, compressed air storage, green ammonia, bifacial solar records, offshore wind size records, battery recycling, solar desalination, gravity storage, tidal energy, EV second-life batteries.
-
-Each tech object: {"headline":"max 12 words","summary":"80 word detailed summary starting with institution/company name, include specific metrics: efficiency %, cost/kWh, % improvement, timeline","source":"one of: CleanTechnica|Electrek|PV Magazine|IRENA|IEA|Solar Power World|Green Tech Media|Bloomberg NEF|MIT Technology Review|Nature Energy|Science Daily|Wood Mackenzie|Canary Media|RE World","searchQuery":"6 words + year 2025 for Google News search","category":"one of: Solar Tech|Battery Innovation|Green Hydrogen|Offshore Wind Tech|Grid Technology|EV Technology|Energy Storage|Carbon Tech|Smart Grid|Agrivoltaics|Wave Energy|Building Solar|Tidal Energy|Green Ammonia","region":"Global or Europe or US or India or Asia","validity":8,"validityReason":"Research institution cited","timeAgo":"1h ago to 6 days ago"}
-
-═══ SECTION 3: "learn" ═══
-Array of 6 objects. Educational cards explaining renewable energy concepts.
-Cover 6 DIFFERENT beginner-to-intermediate topics that professionals and students want to understand.
-
-Each learn object — ALL values must be plain strings (no nested objects, no arrays):
-{"title":"clear educational title max 10 words","category":"one of: Solar Energy|Wind Energy|Battery Storage|Grid & Systems|Hydrogen|EV & Transport|Ocean Energy|Energy Policy","difficulty":"Beginner or Intermediate or Advanced","intro":"70 word engaging introduction explaining why this topic matters","c1_title":"First concept title with emoji","c1_text":"55 word explanation with analogy","c2_title":"Second concept title with emoji","c2_text":"55 word explanation building on first","c3_title":"Third concept title with emoji — include India context","c3_text":"55 word explanation with India-specific data","stat1":"short fact with number","stat2":"short fact with number","stat3":"short fact with number","stat4":"short fact with number","readUrl":"real URL from irena.org or iea.org or mnre.gov.in or nrel.gov","readLabel":"short label e.g. Explore at IRENA"}
-
-Return ONLY the JSON object starting with { and ending with }. No markdown. No explanation. No extra text.`;
+// ── Fetch from /api/news ──────────────────────────────────
+async function fetchNews() {
+  if (isLoad) return;
+  isLoad = true;
+  showSkel('Fetching renewable energy news…');
+  updCounter('Loading…', 0);
 
   try {
-    const res = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': GEMINI_KEY,
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 8192,
-        },
-      }),
+    const res = await fetch(API_URL, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
     });
 
-    if (res.status === 400) {
-      const errBody = await res.text();
-      throw new Error('Gemini API key invalid or request error. Check your key. Details: ' + errBody.slice(0,150));
-    }
-    if (res.status === 404) throw new Error('Gemini model not found (404). Make sure your API key is from aistudio.google.com and is active.');
-    if (res.status === 429) throw new Error('Gemini rate limit hit. Please wait 1 minute and refresh.');
     if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(`Gemini API error ${res.status}: ${errText.slice(0, 100)}`);
+      const errData = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+      throw new Error(errData.error || `Server error ${res.status}`);
     }
 
-    const raw  = await res.json();
-    const text = raw?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const data = safeJSON(text);
+    const data = await res.json();
 
-    if (!data || !data.industry || !data.tech || !data.learn) {
-      throw new Error('Response missing sections. Please refresh.');
-    }
-
-    if (!data.industry.length && !data.tech.length) {
-      throw new Error('No articles generated. Please refresh.');
+    if (!data.industry && !data.tech && !data.learn) {
+      throw new Error('Server returned empty data. Please try again.');
     }
 
     allData   = data;
     learnArts = data.learn || [];
     setCache(data);
-    showTabData(curTab);
-    showToast(`✅ All content loaded — ${data.industry.length + data.tech.length} articles`);
+    showTab(curTab);
+    const total = (data.industry?.length || 0) + (data.tech?.length || 0);
+    showToast(`✅ ${total} articles loaded`);
 
   } catch(err) {
-    console.error('loadAllData:', err.message);
-    showError(err.message, () => { isLoading = false; loadAllData(); });
+    console.error('fetchNews:', err.message);
+    showError(err.message);
   } finally {
-    isLoading = false;
+    isLoad = false;
   }
-}
-
-// ── Load more learning cards ──────────────────────────────
-async function loadMoreLearn() {
-  if (isLoading) return;
-  isLoading = true;
-  updCounter('Generating new learning topics…', curIdx);
-
-  const ALL_TOPICS = [
-    'How solar PV panels generate electricity using the photoelectric effect',
-    'How wind turbines produce power through aerodynamics and generators',
-    'How lithium-ion battery storage works and its grid applications',
-    'How the electricity grid balances supply and demand in real time',
-    'Green hydrogen production through water electrolysis',
-    'How offshore wind farms are built and connected to shore',
-    'What is a Power Purchase Agreement and how it works in India',
-    'How electric vehicles work including motors and regenerative braking',
-    'What are perovskite solar cells and why they are better than silicon',
-    'Agrivoltaics — combining solar panels with farming',
-    'Vehicle-to-grid technology — EVs as mobile grid batteries',
-    'How pumped hydro storage works as a giant battery',
-    'Net metering — how rooftop solar owners sell power back to grid',
-    'Capacity factor — why solar plants produce less than rated output',
-    'Smart meters and demand response for renewable grid management',
-    'India ISTS waiver and how it made renewable energy cheaper',
-    'Bifacial solar panels generating power from both surfaces',
-    'Green ammonia as clean fuel for shipping and fertilisers',
-    'Microgrids for energy independence in villages and islands',
-    'Solid-state batteries versus lithium-ion — safety and density',
-    'Battery Energy Storage Systems stabilising the renewable grid',
-    'Floating solar farms on reservoirs and their advantages',
-    'The duck curve — solar power grid challenge at sunset',
-    'Green steel using hydrogen instead of coal in blast furnaces',
-    'Tidal stream turbines for predictable underwater renewable energy',
-    'Virtual power plants using AI to manage distributed energy',
-    'India National Green Hydrogen Mission targets and incentives',
-    'Carbon border adjustment mechanism and clean energy trade',
-    'Direct air carbon capture combined with renewable energy',
-    'Wave energy converters capturing ocean power',
-  ];
-
-  const unused  = ALL_TOPICS.filter(t => !learnUsed.includes(t));
-  if (unused.length < 4) learnUsed = [];
-  const pool    = unused.length > 0 ? unused : ALL_TOPICS;
-  const chosen  = [...pool].sort(() => Math.random()-0.5).slice(0, 5);
-  learnUsed.push(...chosen);
-
-  const prompt = `Generate 5 renewable energy educational learning cards.
-
-Topics:
-${chosen.map((t,i) => `${i+1}. ${t}`).join('\n')}
-
-Return ONLY a valid JSON array. Each object must have ONLY these flat string fields (no nested objects, no arrays):
-title, category, difficulty, intro, c1_title, c1_text, c2_title, c2_text, c3_title, c3_text, stat1, stat2, stat3, stat4, readUrl, readLabel
-
-Rules:
-- title: max 10 words
-- category: Solar Energy|Wind Energy|Battery Storage|Grid & Systems|Hydrogen|EV & Transport|Ocean Energy|Energy Policy
-- difficulty: Beginner or Intermediate or Advanced
-- intro: 65 word engaging introduction
-- c1_title to c3_title: concept title with emoji
-- c1_text to c3_text: 55 word explanations, c3 must include India context
-- stat1-stat4: short facts with numbers
-- readUrl: real URL from irena.org, iea.org, mnre.gov.in, or nrel.gov
-- readLabel: short label
-
-JSON array only. No markdown. No extra text:`;
-
-  try {
-    const res = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': GEMINI_KEY,
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.65, maxOutputTokens: 4096 },
-      }),
-    });
-
-    if (!res.ok) throw new Error(`Gemini error ${res.status}`);
-    const raw    = await res.json();
-    const text   = raw?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const parsed = safeJSON(text);
-    if (!parsed?.length) throw new Error('Could not generate learning cards. Try again.');
-
-    const prevLen = learnArts.length;
-    learnArts = [...learnArts, ...parsed];
-    arts      = learnArts;
-    curIdx    = prevLen;
-
-    const old = $wrap.querySelector('.loadmore.on');
-    if (old) { old.classList.remove('on'); old.classList.add('eu'); setTimeout(() => old.remove(), 380); }
-    setTimeout(() => {
-      buildLearnCard(arts[curIdx], curIdx, 'ed');
-      updCounter(`${curIdx+1} of ${arts.length}`, curIdx);
-      $prev.disabled = false;
-      $next.disabled = false;
-    }, 200);
-
-    showToast(`✅ ${parsed.length} new learning cards added`);
-  } catch(err) {
-    showError(err.message, () => { isLoading = false; loadMoreLearn(); });
-  } finally {
-    isLoading = false;
-  }
-}
-
-// ── Show tab data ─────────────────────────────────────────
-function showTabData(tab) {
-  if (tab === 'learn') {
-    if (!learnArts.length) learnArts = allData?.learn || [];
-    arts = learnArts;
-  } else {
-    arts = allData?.[tab] || [];
-  }
-  if (!arts.length) {
-    showError('No content for this tab. Tap ↺ to refresh.', loadAllData);
-    return;
-  }
-  renderFirst(tab);
 }
 
 // ── Navigation ────────────────────────────────────────────
 function nav(dir) {
   const nxt = curIdx + dir;
+
+  // Learning tab: show load-more at end
   if (curTab === 'learn' && nxt >= arts.length) {
     animOut(dir);
-    showLoadMoreCard();
+    showLoadMore();
     return;
   }
+
   if (nxt < 0 || nxt >= arts.length) return;
+
   animOut(dir);
   curIdx = nxt;
-  if (curTab === 'learn') buildLearnCard(arts[curIdx], curIdx, dir > 0 ? 'ed' : 'eu');
-  else                    buildNewsCard (arts[curIdx], curIdx, dir > 0 ? 'ed' : 'eu');
-  updCounter(`${curIdx+1} of ${arts.length}`, curIdx);
+  buildCard(arts[curIdx], curIdx, dir > 0 ? 'ed' : 'eu');
+  updCounter(`${curIdx + 1} of ${arts.length}`, curIdx);
   $prev.disabled = curIdx === 0;
-  $next.disabled = curTab !== 'learn' && curIdx === arts.length-1;
+  $next.disabled = curTab !== 'learn' && curIdx === arts.length - 1;
 }
 
 function animOut(dir) {
   const old = $wrap.querySelector('.card.on, .loadmore.on');
-  if (old) { old.classList.remove('on'); old.classList.add(dir > 0 ? 'eu' : 'ed'); setTimeout(() => old.remove(), 380); }
+  if (old) {
+    old.classList.remove('on');
+    old.classList.add(dir > 0 ? 'eu' : 'ed');
+    setTimeout(() => old.remove(), 380);
+  }
 }
 
-function renderFirst(type) {
-  [$wrap.querySelector('.card.on'), $wrap.querySelector('.loadmore.on'), $wrap.querySelector('.sk-card'), $wrap.querySelector('.err-card'), $wrap.querySelector('.loading-msg'), $wrap.querySelector('.file-warn')].forEach(el => el?.remove());
+// ── Render ────────────────────────────────────────────────
+function renderFirst() {
+  // Clear wrap
+  $wrap.innerHTML = '';
   curIdx = 0;
-  if (type === 'learn') buildLearnCard(arts[0], 0, 'ed');
-  else                  buildNewsCard (arts[0], 0, 'ed');
+  buildCard(arts[0], 0, 'ed');
   updCounter(`1 of ${arts.length}`, 0);
   $prev.disabled = true;
   $next.disabled = arts.length <= 1;
 }
 
-// ── Build news card ───────────────────────────────────────
-function buildNewsCard(a, idx, from) {
+function buildCard(a, idx, from) {
   if (!a) return;
+  curTab === 'learn' ? buildLearnCard(a, idx, from) : buildNewsCard(a, idx, from);
+}
+
+// ── News card ─────────────────────────────────────────────
+function buildNewsCard(a, idx, from) {
   const v   = Number(a.validity) || 7;
   const vc  = v >= 8 ? 'vhi' : 'vmd';
   const vt  = v >= 8 ? `Verified · ${v}/10` : `Moderate · ${v}/10`;
@@ -631,21 +476,22 @@ function buildNewsCard(a, idx, from) {
     ? `https://news.google.com/search?q=${encodeURIComponent(a.searchQuery)}&hl=en-IN&gl=IN&tbs=qdr:w`
     : '';
 
-  const card = document.createElement('div');
-  card.className = `card ${from}`;
+  const card = mk('div', `card ${from}`);
   card.innerHTML = `
     <div class="card-img">
-      <img src="${img}" alt="" onload="this.classList.add('vis')"
+      <img src="${img}" alt=""
+        onload="this.classList.add('vis')"
         onerror="this.src='https://images.unsplash.com/photo-1509391366360-2e959784a276?w=900&h=500&fit=crop'">
       <div class="img-grad"></div>
-      <div class="badge-cat">${x(a.category)}</div>
-      <div class="badge-src">${x(a.source)}</div>
-      <div class="badge-meta"><span>${x(a.region)}</span><span>${x(a.timeAgo)}</span></div>
+      <div class="b-cat">${x(a.category)}</div>
+      <div class="b-src">${x(a.source)}</div>
+      <div class="b-meta"><span>${x(a.region)}</span><span>${x(a.timeAgo)}</span></div>
     </div>
     <div class="card-body">
       <div class="c-head">${x(a.headline)}</div>
-      <div class="c-sum">${x(a.summary)}</div>
-      ${searchUrl ? `<a href="${searchUrl}" target="_blank" rel="noopener" class="btn-action">
+      <div class="c-body">${x(a.summary)}</div>
+      ${searchUrl ? `
+      <a href="${searchUrl}" target="_blank" rel="noopener" class="btn-act">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         Search on Google News (last 7 days)
       </a>` : ''}
@@ -657,39 +503,38 @@ function buildNewsCard(a, idx, from) {
         </div>
       </div>
     </div>`;
-  $wrap.appendChild(card);
-  raf(() => raf(() => card.classList.replace(from, 'on')));
+
+  append(card, from);
 }
 
-// ── Build learning card ───────────────────────────────────
+// ── Learning card ─────────────────────────────────────────
 function buildLearnCard(a, idx, from) {
-  if (!a) return;
-  const dc    = a.difficulty==='Advanced'?'diff-adv':a.difficulty==='Intermediate'?'diff-int':'diff-beg';
+  const dc    = a.difficulty === 'Advanced' ? 'd-adv' : a.difficulty === 'Intermediate' ? 'd-int' : 'd-beg';
   const img   = getImg(a.category, idx + 300);
   const stats = [a.stat1, a.stat2, a.stat3, a.stat4].filter(Boolean);
 
-  const card = document.createElement('div');
-  card.className = `card ${from}`;
+  const card = mk('div', `card ${from}`);
   card.innerHTML = `
     <div class="learn-img">
-      <img src="${img}" alt="" onload="this.classList.add('vis')"
+      <img src="${img}" alt=""
+        onload="this.classList.add('vis')"
         onerror="this.src='https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=900&h=500&fit=crop'">
       <div class="img-grad"></div>
-      <div class="badge-cat">${x(a.category)}</div>
-      <div class="badge-src">Learning Tech</div>
-      <div class="badge-diff ${dc}">${x(a.difficulty)}</div>
+      <div class="b-cat">${x(a.category)}</div>
+      <div class="b-src">Learning Tech</div>
+      <div class="b-diff ${dc}">${x(a.difficulty)}</div>
     </div>
     <div class="card-body">
       <div class="c-head">${x(a.title)}</div>
-      <div class="c-sum">${x(a.intro)}</div>
-      ${a.c1_title?`<div class="cblock"><div class="cblock-t">${x(a.c1_title)}</div><div class="cblock-b">${x(a.c1_text)}</div></div>`:''}
-      ${a.c2_title?`<div class="cblock"><div class="cblock-t">${x(a.c2_title)}</div><div class="cblock-b">${x(a.c2_text)}</div></div>`:''}
-      ${a.c3_title?`<div class="cblock"><div class="cblock-t">${x(a.c3_title)}</div><div class="cblock-b">${x(a.c3_text)}</div></div>`:''}
-      ${stats.length?`<div class="stats-row">${stats.map(s=>`<span class="stat-chip">${x(s)}</span>`).join('')}</div>`:''}
-      ${a.readUrl?`<a href="${x(a.readUrl)}" target="_blank" rel="noopener" class="btn-action">
+      <div class="c-body">${x(a.intro)}</div>
+      ${a.c1_title ? `<div class="cblock"><div class="cblock-t">${x(a.c1_title)}</div><div class="cblock-b">${x(a.c1_text)}</div></div>` : ''}
+      ${a.c2_title ? `<div class="cblock"><div class="cblock-t">${x(a.c2_title)}</div><div class="cblock-b">${x(a.c2_text)}</div></div>` : ''}
+      ${a.c3_title ? `<div class="cblock"><div class="cblock-t">${x(a.c3_title)}</div><div class="cblock-b">${x(a.c3_text)}</div></div>` : ''}
+      ${stats.length ? `<div class="stats-row">${stats.map(s => `<span class="stat-chip">${x(s)}</span>`).join('')}</div>` : ''}
+      ${a.readUrl ? `<a href="${x(a.readUrl)}" target="_blank" rel="noopener" class="btn-act">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        ${x(a.readLabel||'Learn more')}
-      </a>`:''}
+        ${x(a.readLabel || 'Learn more')}
+      </a>` : ''}
       <div class="c-foot">
         <div class="vbadge vhi"><div class="vdot"></div>AI Generated</div>
         <div class="swipe-hint">
@@ -698,26 +543,45 @@ function buildLearnCard(a, idx, from) {
         </div>
       </div>
     </div>`;
-  $wrap.appendChild(card);
-  raf(() => raf(() => card.classList.replace(from, 'on')));
+
+  append(card, from);
 }
 
-function showLoadMoreCard() {
-  const el = document.createElement('div');
-  el.className = 'loadmore ed';
+function showLoadMore() {
+  const el = mk('div', 'loadmore ed');
   el.innerHTML = `
-    <div class="lm-emoji">📚</div>
-    <div class="lm-title">You've read all ${arts.length} learning cards!</div>
-    <div class="lm-sub">Generate 5 more cards on new renewable energy topics</div>
-    <button class="lm-btn" onclick="loadMoreLearn()">Load More Topics →</button>`;
+    <div style="font-size:44px">📚</div>
+    <div style="font-size:16px;font-weight:700;color:#1a1a1a;text-align:center;padding:0 16px">
+      You've read all ${arts.length} learning cards!
+    </div>
+    <div style="font-size:13px;color:#777;text-align:center;max-width:240px;line-height:1.6">
+      Tap refresh to generate new cards on different topics
+    </div>
+    <button class="lm-btn" onclick="refreshLearn()">Load More Topics →</button>`;
   $wrap.appendChild(el);
-  raf(() => raf(() => el.classList.replace('ed','on')));
-  updCounter(`All ${arts.length} read · load more`, arts.length-1);
-  $prev.disabled = false; $next.disabled = true;
+  raf(() => raf(() => el.classList.replace('ed', 'on')));
+  updCounter(`All ${arts.length} read`, arts.length - 1);
+  $prev.disabled = false;
+  $next.disabled = true;
+}
+
+function refreshLearn() {
+  // Clear only learn cache, reload
+  try {
+    const raw = localStorage.getItem('rp_v2_cache');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      delete parsed.data.learn;
+      localStorage.setItem('rp_v2_cache', JSON.stringify(parsed));
+    }
+  } catch {}
+  allData = null;
+  isLoad  = false;
+  fetchNews();
 }
 
 // ── UI helpers ────────────────────────────────────────────
-function showLoadingMsg(msg) {
+function showSkel(msg) {
   $wrap.innerHTML = `
     <div class="sk-card">
       <div class="sk-img"></div>
@@ -727,70 +591,60 @@ function showLoadingMsg(msg) {
         <div class="sk-line sk-l"></div>
       </div>
     </div>
-    <div class="loading-msg">
-      <div class="loading-spinner"></div>
-      <div class="loading-text">${msg}</div>
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <div class="loading-txt">${msg || 'Loading…'}</div>
     </div>`;
-  $prev.disabled = true; $next.disabled = true;
+  $prev.disabled = true;
+  $next.disabled = true;
 }
 
-function showError(msg, retryFn) {
+function showError(msg) {
   $wrap.innerHTML = `
     <div class="err-card">
       <div style="font-size:36px">⚠️</div>
       <div style="font-size:15px;font-weight:700;color:#1a1a1a">Could not load content</div>
       <div style="font-size:12.5px;color:#888;line-height:1.65;max-width:270px">${x(msg)}</div>
-      <button class="err-retry" id="retryBtn">Try Again</button>
+      <button class="err-retry" onclick="retryFetch()">Try Again</button>
     </div>`;
-  if (retryFn) document.getElementById('retryBtn').addEventListener('click', retryFn);
   updCounter('Error — tap Try Again', 0);
-  $prev.disabled = true; $next.disabled = true;
+  $prev.disabled = true;
+  $next.disabled = true;
 }
 
-function showFileWarn() {
-  $wrap.innerHTML = `
-    <div class="file-warn">
-      <div style="font-size:36px">⚠️</div>
-      <div style="font-size:15px;font-weight:700;color:#B71C1C">Cannot run from desktop</div>
-      <div style="font-size:13px;color:#333;line-height:1.7;max-width:280px">
-        Open from your GitHub Pages URL:<br><br>
-        <strong>https://yourname.github.io/repower-news</strong>
-      </div>
-    </div>`;
-  updCounter('Use GitHub Pages URL', 0);
-}
+function retryFetch() { isLoad = false; fetchNews(); }
 
 function updCounter(txt, idx) {
   $cText.textContent = txt;
   $cDots.innerHTML   = '';
   const n = Math.min(arts.length, 10);
-  for (let i=0; i<n; i++) {
-    const d = document.createElement('div');
-    d.className = `cdot${i===idx?' on':''}`;
+  for (let i = 0; i < n; i++) {
+    const d = mk('div', `cdot${i === idx ? ' on' : ''}`);
     $cDots.appendChild(d);
   }
 }
 
-function safeJSON(t) {
-  if (!t) return null;
-  for (const fn of [
-    () => JSON.parse(t.trim()),
-    () => JSON.parse(t.replace(/```json|```/g,'').trim()),
-    () => { const m = t.match(/[\[{][\s\S]*[\]}]/); if (m) return JSON.parse(m[0]); throw 0; },
-  ]) { try { const r = fn(); return r; } catch {} }
-  return null;
+function append(card, from) {
+  $wrap.appendChild(card);
+  raf(() => raf(() => card.classList.replace(from, 'on')));
 }
 
-function showToast(m, ms=2500) {
+function showToast(m, ms = 2500) {
   $toast.textContent = m;
   $toast.classList.add('show');
   setTimeout(() => $toast.classList.remove('show'), ms);
 }
 
+function mk(tag, cls) {
+  const el = document.createElement(tag);
+  el.className = cls;
+  return el;
+}
+
 const raf = requestAnimationFrame;
 
 function x(s) {
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 </script>
 </body>
