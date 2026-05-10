@@ -229,7 +229,8 @@ const GEMINI_KEY = 'AIzaSyDkQvK0DMQHF7Ck631AzHYLmrq2sEoZ4Jg';
 // Gemini API — completely free, 15 req/min, 1M tokens/day
 // We make only ONE call that loads ALL THREE tabs at once
 // Result cached for 24 hours → almost zero chance of rate limits
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+// API key passed as x-goog-api-key header (correct per Google docs)
 
 // 24 hour cache — one API call per day per user
 const CACHE_MS = 24 * 60 * 60 * 1000;
@@ -414,19 +415,24 @@ Return ONLY the JSON object starting with { and ending with }. No markdown. No e
   try {
     const res = await fetch(GEMINI_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': GEMINI_KEY,
+      },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.7,
           maxOutputTokens: 8192,
-          responseMimeType: 'application/json',
         },
       }),
     });
 
-    if (res.status === 400) throw new Error('Invalid Gemini API key. Please update it in the code.');
-    if (res.status === 404) throw new Error('Gemini model not found. Please refresh — the app will retry.');
+    if (res.status === 400) {
+      const errBody = await res.text();
+      throw new Error('Gemini API key invalid or request error. Check your key. Details: ' + errBody.slice(0,150));
+    }
+    if (res.status === 404) throw new Error('Gemini model not found (404). Make sure your API key is from aistudio.google.com and is active.');
     if (res.status === 429) throw new Error('Gemini rate limit hit. Please wait 1 minute and refresh.');
     if (!res.ok) {
       const errText = await res.text();
@@ -528,7 +534,10 @@ JSON array only. No markdown. No extra text:`;
   try {
     const res = await fetch(GEMINI_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': GEMINI_KEY,
+      },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.65, maxOutputTokens: 4096 },
